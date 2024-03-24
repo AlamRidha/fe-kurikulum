@@ -1,7 +1,8 @@
 import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
-import Faseview from "../views/FaseView.vue";
+import FaseView from "../views/FaseView.vue";
+import AdministrasiGuruView from "../views/AdministrasiGuruView.vue";
 import ListGuruView from "../views/ListGuruView.vue";
 
 const router = createRouter({
@@ -9,27 +10,32 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "Home",
       component: HomeView,
     },
     {
       path: "/login",
-      name: "login",
+      name: "Login",
       component: LoginView,
     },
     {
       path: "/logout",
-      name: "logout",
+      name: "Logout",
       component: LoginView,
     },
     {
       path: "/fase",
-      name: "fase",
-      component: Faseview,
+      name: "Fase",
+      component: FaseView,
+    },
+    {
+      path: "/administrasiguru",
+      name: "Administrasi Guru",
+      component: AdministrasiGuruView,
     },
     {
       path: "/listguru",
-      name: "listguru",
+      name: "List Guru",
       component: ListGuruView,
     },
   ],

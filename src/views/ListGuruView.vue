@@ -4,8 +4,8 @@
             <MenuTitle msg="Menu | List Guru" class="text-subtitle-1 font-weight-medium " />
             <v-row class="d-flex flex-row-reverse">
                 <v-col md="4">
-                    <v-text-field v-model="searchData" append-icon="mdi mdi-magnify" label="Search" single-line
-                        hide-details></v-text-field>
+                    <v-text-field v-model="searchData" append-icon="mdi mdi-magnify" single-line
+                        placeholder="Search name..." hide-details></v-text-field>
                 </v-col>
             </v-row>
 
@@ -68,6 +68,17 @@
                     <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
                         @click="deleteItem(item.id)"></v-btn>
                 </template>
+
+                <!-- Searching -->
+                <template v-slot:tfoot>
+                    <tr>
+                        <td>
+                            <v-text-field v-model="searchData" class="ma-2" density="compact"
+                                placeholder="Search name..." hide-details></v-text-field>
+                        </td>
+                    </tr>
+                </template>
+
             </v-data-table>
 
             <!-- fitur search -->

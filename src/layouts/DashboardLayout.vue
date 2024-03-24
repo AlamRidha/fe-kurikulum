@@ -2,7 +2,7 @@
     <v-layout>
         <v-app-bar>
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-app-bar-title>Perencanaan Penyusunan & Kurikulum</v-app-bar-title>
+            <v-app-bar-title>Perangkat Penyusunan Kurikulum Merdeka</v-app-bar-title>
             <v-spacer></v-spacer>
             <v-btn variant="outlined">
                 <RouterLink to="/logout" style="text-decoration: none;">Logout</RouterLink>
