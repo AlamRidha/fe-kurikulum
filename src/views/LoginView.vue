@@ -1,9 +1,10 @@
 <template>
     <v-container>
-        <v-row justify="center">
-            <v-col cols="5">
-                <v-card class="pa-10 mt-12" elevation="8">
-                    <v-card-title>Login</v-card-title>
+        <v-row justify="center" class="mt-11">
+            <v-col cols="6" class="">
+                <v-card class="pa-10 mt-16" elevation="9">
+                    <v-card-title>Perangkat Penyusunan Kurikulum Merdeka</v-card-title>
+                    <v-card-subtitle>Login</v-card-subtitle>
                     <v-card-item>
                         <v-form @submit.prevent="submitData">
                             <v-text-field v-model="forms.nip" :rules="rules" label="NIP"
@@ -16,6 +17,8 @@
                     </v-card-item>
                 </v-card>
             </v-col>
+            <iframe src="https://lottie.host/embed/70d73fed-70a2-43a8-9ab1-8d2c9958b907/4N3hPHRMNB.json"
+                style="border: none;" class="ms-8"></iframe>
         </v-row>
     </v-container>
 </template>
@@ -37,7 +40,7 @@ const rules = [
     value => {
         if (value) return true
 
-        return "You must enter this field"
+        return "Field ini wajib diisi"
     }
 ]
 

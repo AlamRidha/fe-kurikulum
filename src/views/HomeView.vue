@@ -1,9 +1,9 @@
 <template>
-    <DashboardLayout>
-        <v-container fluid>
-            <RouterView />
-        </v-container>
-    </DashboardLayout>
+    <!-- <DashboardLayout> -->
+    <v-container fluid>
+        <RouterView />
+    </v-container>
+    <!-- </DashboardLayout> -->
 </template>
 
 <script setup>

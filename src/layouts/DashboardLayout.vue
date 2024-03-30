@@ -10,7 +10,10 @@
         </v-app-bar>
 
         <v-navigation-drawer :width="250" v-model="drawer" class="pt-5">
-            <!-- <v-divider></v-divider> -->
+            <v-list-item>
+                <p>Hi, admin</p>
+            </v-list-item>
+            <v-divider></v-divider>
             <v-list-item to="/fase" title="Fase" class="my-8">
                 <template v-slot:prepend>
                     <v-icon icon="mdi mdi-town-hall" />

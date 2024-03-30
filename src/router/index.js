@@ -4,6 +4,9 @@ import LoginView from "../views/LoginView.vue";
 import FaseView from "../views/FaseView.vue";
 import AdministrasiGuruView from "../views/AdministrasiGuruView.vue";
 import ListGuruView from "../views/ListGuruView.vue";
+import FaseFirstView from "../views/FaseMenu/FaseFirst.vue";
+import MataPelajaranView from "../views/FaseMenu/FaseMataPelajaran.vue";
+import MenuMataPelajaranView from "../views/FaseMenu/MataPelajaran.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -11,7 +14,7 @@ const router = createRouter({
     {
       path: "/",
       name: "Home",
-      component: HomeView,
+      component: FaseView,
     },
     {
       path: "/login",
@@ -27,6 +30,24 @@ const router = createRouter({
       path: "/fase",
       name: "Fase",
       component: FaseView,
+      children: [
+        {
+          path: ":idFase",
+          component: FaseFirstView,
+          children: [
+            {
+              path: "semester/:idSemester",
+              component: MataPelajaranView,
+              children: [
+                {
+                  path: "mata-pelajaran/:idMataPelajaran",
+                  component: MenuMataPelajaranView,
+                },
+              ],
+            },
+          ],
+        },
+      ],
     },
     {
       path: "/administrasiguru",
