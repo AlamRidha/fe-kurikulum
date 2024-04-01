@@ -1,95 +1,89 @@
 <template>
-    <DashboardLayout>
-        <v-container fluid>
-            <MenuTitle msg="Menu | List Guru" class="text-subtitle-1 font-weight-medium " />
-            <v-row class="d-flex flex-row-reverse">
-                <v-col md="4">
-                    <v-text-field v-model="searchData" append-icon="mdi mdi-magnify" single-line
-                        placeholder="Search name..." hide-details></v-text-field>
-                </v-col>
-            </v-row>
+    <v-container fluid>
+        <MenuTitle msg="Menu | List Guru" class="text-subtitle-1 font-weight-medium " />
+        <v-row class="d-flex flex-row-reverse">
+            <v-col md="4">
+                <v-text-field v-model="searchData" append-icon="mdi mdi-magnify" single-line
+                    placeholder="Search name..." hide-details></v-text-field>
+            </v-col>
+        </v-row>
 
-            <v-data-table :headers="headers" :items="dummyData" :items-per-page="5" class="elevation-5 mt-4"
-                :search="searchData">
-                <template v-slot:top>
-                    <v-toolbar flat>
-                        <v-toolbar-title>Data Guru</v-toolbar-title>
-                        <v-divider class="mx-4" inset vertical></v-divider>
-                        <v-spacer></v-spacer>
-                        <v-dialog v-model="dialog" max-width="550px">
-                            <template v-slot:activator="{ props }">
-                                <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props"
-                                    prepend-icon="mdi mdi-plus">
-                                    Tambah Item
+        <v-data-table :headers="headers" :items="dummyData" :items-per-page="5" class="elevation-5 mt-4"
+            :search="searchData">
+            <template v-slot:top>
+                <v-toolbar flat>
+                    <v-toolbar-title>Data Guru</v-toolbar-title>
+                    <v-divider class="mx-4" inset vertical></v-divider>
+                    <v-spacer></v-spacer>
+                    <v-dialog v-model="dialog" max-width="550px">
+                        <template v-slot:activator="{ props }">
+                            <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props" prepend-icon="mdi mdi-plus">
+                                Tambah Item
+                            </v-btn>
+                        </template>
+                        <v-card class="py-5 px-2">
+                            <v-card-title>
+                                <span class="text-h5">Form Guru</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container>
+                                    <v-text-field v-model="forms.userName" label="Nama Guru"></v-text-field>
+                                    <v-text-field v-model="forms.nip" label="Nip"></v-text-field>
+                                    <v-text-field v-model="forms.password" label="Password"></v-text-field>
+                                    <v-text-field v-model="forms.nohp" label="No Handphone"></v-text-field>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="error" variant="text" @click="close">
+                                    Cancel
                                 </v-btn>
-                            </template>
-                            <v-card class="py-5 px-2">
-                                <v-card-title>
-                                    <span class="text-h5">Form Guru</span>
-                                </v-card-title>
+                                <v-btn color="blue-darken-1" variant="text" @click="save">
+                                    Save
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                    <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
+                                <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
+                                <v-spacer></v-spacer>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+                </v-toolbar>
+            </template>
 
-                                <v-card-text>
-                                    <v-container>
-                                        <v-text-field v-model="forms.userName" label="Nama Guru"></v-text-field>
-                                        <v-text-field v-model="forms.nip" label="Nip"></v-text-field>
-                                        <v-text-field v-model="forms.password" label="Password"></v-text-field>
-                                        <v-text-field v-model="forms.nohp" label="No Handphone"></v-text-field>
-                                    </v-container>
-                                </v-card-text>
+            <template v-slot:item.actions="{ item }">
+                <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
+                    @click="editItem(item.id)"></v-btn>
+                <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
+                    @click="deleteItem(item.id)"></v-btn>
+            </template>
 
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="error" variant="text" @click="close">
-                                        Cancel
-                                    </v-btn>
-                                    <v-btn color="blue-darken-1" variant="text" @click="save">
-                                        Save
-                                    </v-btn>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                        <v-dialog v-model="dialogDelete" max-width="500px">
-                            <v-card>
-                                <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
-                                <v-card-actions>
-                                    <v-spacer></v-spacer>
-                                    <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
-                                    <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
-                                    <v-spacer></v-spacer>
-                                </v-card-actions>
-                            </v-card>
-                        </v-dialog>
-                    </v-toolbar>
-                </template>
+            <!-- Searching -->
+            <template v-slot:tfoot>
+                <tr>
+                    <td>
+                        <v-text-field v-model="searchData" class="ma-2" density="compact" placeholder="Search name..."
+                            hide-details></v-text-field>
+                    </td>
+                </tr>
+            </template>
 
-                <template v-slot:item.actions="{ item }">
-                    <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
-                        @click="editItem(item.id)"></v-btn>
-                    <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
-                        @click="deleteItem(item.id)"></v-btn>
-                </template>
-
-                <!-- Searching -->
-                <template v-slot:tfoot>
-                    <tr>
-                        <td>
-                            <v-text-field v-model="searchData" class="ma-2" density="compact"
-                                placeholder="Search name..." hide-details></v-text-field>
-                        </td>
-                    </tr>
-                </template>
-
-            </v-data-table>
-
-
-        </v-container>
-    </DashboardLayout>
+        </v-data-table>
+    </v-container>
 </template>
 
 <script setup>
-import DashboardLayout from '../layouts/DashboardLayout.vue';
 import MenuTitle from "../components/MenuTitle.vue"
-import { ref, computed, watch } from "vue"
+import { ref } from "vue"
 
 const forms = ref({
     userName: "",

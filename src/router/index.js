@@ -1,12 +1,11 @@
 import { createRouter, createWebHistory } from "vue-router";
-import HomeView from "../views/HomeView.vue";
 import LoginView from "../views/LoginView.vue";
 import FaseView from "../views/FaseView.vue";
 import AdministrasiGuruView from "../views/AdministrasiGuruView.vue";
 import ListGuruView from "../views/ListGuruView.vue";
 import FaseFirstView from "../views/FaseMenu/FaseFirst.vue";
 import MataPelajaranView from "../views/FaseMenu/FaseMataPelajaran.vue";
-import MenuMataPelajaranView from "../views/FaseMenu/MataPelajaran.vue";
+import Layout from "../layouts/DashboardLayout.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -14,7 +13,38 @@ const router = createRouter({
     {
       path: "/",
       name: "Home",
-      component: FaseView,
+      component: Layout,
+      children: [
+        {
+          path: "/",
+          name: "dashboard",
+        },
+        {
+          path: "/fase",
+          name: "Fase",
+          component: FaseView,
+        },
+        {
+          path: "fase/:idFase/semester",
+          name: "First Face",
+          component: FaseFirstView,
+        },
+        {
+          path: "fase/:idFase/semester/:idSemester/mata-pelajaran",
+          name: "Mapel",
+          component: MataPelajaranView,
+        },
+        {
+          path: "/datalistguru",
+          name: "Data List Guru",
+          component: ListGuruView,
+        },
+        {
+          path: "/administrasiguru",
+          name: "Administrasi Guru",
+          component: AdministrasiGuruView,
+        },
+      ],
     },
     {
       path: "/login",
@@ -25,39 +55,6 @@ const router = createRouter({
       path: "/logout",
       name: "Logout",
       component: LoginView,
-    },
-    {
-      path: "/fase",
-      name: "Fase",
-      component: FaseView,
-      children: [
-        {
-          path: ":idFase",
-          component: FaseFirstView,
-          children: [
-            {
-              path: "semester/:idSemester",
-              component: MataPelajaranView,
-              children: [
-                {
-                  path: "mata-pelajaran/:idMataPelajaran",
-                  component: MenuMataPelajaranView,
-                },
-              ],
-            },
-          ],
-        },
-      ],
-    },
-    {
-      path: "/administrasiguru",
-      name: "Administrasi Guru",
-      component: AdministrasiGuruView,
-    },
-    {
-      path: "/listguru",
-      name: "List Guru",
-      component: ListGuruView,
     },
   ],
 });

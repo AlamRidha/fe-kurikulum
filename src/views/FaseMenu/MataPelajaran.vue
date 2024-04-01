@@ -1,5 +1,11 @@
 <template>
-    <h1>
-        menu mapel
-    </h1>
+    <DashboardLayout>
+        <h1>Menu Mapel</h1>
+    </DashboardLayout>
 </template>
+
+
+<script setup>
+import DashboardLayout from '../../layouts/DashboardLayout.vue';
+
+</script>

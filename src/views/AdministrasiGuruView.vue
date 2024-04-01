@@ -1,41 +1,38 @@
 <template>
-    <DashboardLayout>
-        <v-container fluid>
-            <MenuTitle msg="Menu | Administrasi Guru" />
-            <div class="d-flex flex-row-reverse mb-3">
-                <v-dialog max-width="500">
-                    <template v-slot:activator="{ props: activatorProps }">
-                        <v-btn v-bind="activatorProps" color="deep-orange" text="Open Dialog" variant="flat"
-                            prepend-icon="mdi mdi-plus">Tambah
-                            Data</v-btn>
-                    </template>
+    <v-container fluid>
+        <MenuTitle msg="Menu | Administrasi Guru" />
+        <div class="d-flex flex-row-reverse mb-3">
+            <v-dialog max-width="500">
+                <template v-slot:activator="{ props: activatorProps }">
+                    <v-btn v-bind="activatorProps" color="deep-orange" text="Open Dialog" variant="flat"
+                        prepend-icon="mdi mdi-plus">Tambah
+                        Data</v-btn>
+                </template>
 
-                    <template v-slot:default="{ isActive }">
-                        <v-card>
-                            <v-card-title>Form Tambah Data Buku</v-card-title>
-                            <v-card-text>
-                                <v-form validate-on="submit lazy" @submit.prevent="submitData">
-                                    <v-text-field label="Jenis Buku" v-model="forms.jenisBuku" required></v-text-field>
-                                    <v-text-field label="Link Buku" v-model="forms.linkBuku" required></v-text-field>
-                                    <v-text-field label="Tahun Ajaran" v-model="forms.tahunAjaran"
-                                        required></v-text-field>
-                                    <v-btn class="mt-2 mb-5 bg-success" text="Tambah Data Buku" type="submit"
-                                        block></v-btn>
-                                </v-form>
-                            </v-card-text>
+                <template v-slot:default="{ isActive }">
+                    <v-card>
+                        <v-card-title>Form Tambah Data Buku</v-card-title>
+                        <v-card-text>
+                            <v-form validate-on="submit lazy" @submit.prevent="submitData">
+                                <v-text-field label="Jenis Buku" v-model="forms.jenisBuku" required></v-text-field>
+                                <v-text-field label="Link Buku" v-model="forms.linkBuku" required></v-text-field>
+                                <v-text-field label="Tahun Ajaran" v-model="forms.tahunAjaran" required></v-text-field>
+                                <v-btn class="mt-2 mb-5 bg-success" text="Tambah Data Buku" type="submit" block></v-btn>
+                            </v-form>
+                        </v-card-text>
 
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn text="Batal" class="bg-error" @click="isActive.value = false"></v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </template>
-                </v-dialog>
-            </div>
+                        <v-card-actions>
+                            <v-spacer></v-spacer>
+                            <v-btn text="Batal" class="bg-error" @click="isActive.value = false"></v-btn>
+                        </v-card-actions>
+                    </v-card>
+                </template>
+            </v-dialog>
+        </div>
 
-            <v-data-table :headers="headers" class="elevation-5 mt-5 pa-8" :items="dataBuku" item-key="id">
+        <v-data-table :headers="headers" class="elevation-5 mt-5 pa-8" :items="dataBuku" item-key="id">
 
-                <!-- <template v-slot:item="{ item }">
+            <!-- <template v-slot:item="{ item }">
                     <tr>
                         <td
                             :class="{ 'text-blue': item.jenisBuku === 1, 'text-orange': item.jenisBuku === 2, 'text-green': item.jenisBuku === 3 }">
@@ -48,17 +45,15 @@
                     </tr>
                 </template> -->
 
-                <template v-slot:item.actions="{ item }">
-                    <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
-                        @click="deleteItem(item.id)"></v-btn>
-                </template>
-            </v-data-table>
-        </v-container>
-    </DashboardLayout>
+            <template v-slot:item.actions="{ item }">
+                <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
+                    @click="deleteItem(item.id)"></v-btn>
+            </template>
+        </v-data-table>
+    </v-container>
 </template>
 
 <script setup>
-import DashboardLayout from '../layouts/DashboardLayout.vue';
 import MenuTitle from '../components/MenuTitle.vue';
 import { ref } from 'vue'
 

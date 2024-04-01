@@ -24,7 +24,7 @@
                     <v-icon icon="mdi mdi-book" />
                 </template>
             </v-list-item>
-            <v-list-item to="/listguru" title="List Guru" class="my-8">
+            <v-list-item to="/datalistguru" title="List Guru" class="my-8">
                 <template v-slot:prepend>
                     <v-icon icon="mdi mdi-account-card" />
                 </template>
@@ -33,7 +33,7 @@
         </v-navigation-drawer>
 
         <v-main>
-            <slot></slot>
+            <RouterView />
         </v-main>
     </v-layout>
 </template>
@@ -41,15 +41,6 @@
 <script setup>
 import { RouterView } from 'vue-router';
 import { ref } from 'vue'
-
-import { useRouter } from 'vue-router';
-
-
-const router = useRouter();
-
-function submitData() {
-    alert(JSON.stringify(forms.value))
-}
 
 const drawer = ref(null)
 </script>
