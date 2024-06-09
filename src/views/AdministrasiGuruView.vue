@@ -205,7 +205,7 @@ const loadData = async () => {
         const response = await axios.get('http://localhost:3000/dbuku')
         const data = response.data
         dataBuku.value = data
-        console.log(data)
+        // console.log(data)
     } catch (error) {
         console.log("Error get Data", error)
 
