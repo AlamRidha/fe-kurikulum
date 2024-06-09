@@ -1,7 +1,7 @@
 <template>
     <v-container fluid>
         <MenuTitle msg="Menu | Fase" class="text-subtitle-1 font-weight-medium" />
-        <v-container class="">
+        <v-container class="elevation-5">
             <v-row>
                 <v-col cols="12" sm="3" v-for="i in  fase ">
                     <v-sheet class="ma-2 pa-2">
