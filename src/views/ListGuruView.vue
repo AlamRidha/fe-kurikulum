@@ -4,7 +4,7 @@
         <v-row class="d-flex flex-row-reverse">
             <v-col md="4">
                 <v-text-field v-model="searchData" append-icon="mdi mdi-magnify" single-line
-                    placeholder="Search name..." hide-details></v-text-field>
+                    placeholder="Cari Nama Guru..." hide-details></v-text-field>
             </v-col>
         </v-row>
 
@@ -18,6 +18,8 @@
                     <v-toolbar-title>Data Guru</v-toolbar-title>
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-spacer></v-spacer>
+
+                    <!-- modal tambah -->
                     <v-dialog v-model="dialog" max-width="550px">
                         <template v-slot:activator="{ props }">
                             <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props" prepend-icon="mdi mdi-plus">
@@ -30,7 +32,7 @@
                             </v-card-title>
 
                             <v-card-text>
-                                <v-container>
+                                <v-container class="py-4">
                                     <v-form ref="form" v-model="isFormValid">
                                         <v-text-field v-model="forms.nameUser" label="Nama Guru"
                                             :rules="nameRules"></v-text-field>
@@ -49,22 +51,63 @@
 
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="error" variant="text" @click="close">
-                                    Cancel
+                                <v-btn color="error" variant="text" @click="close" elevation="4">
+                                    Batal
                                 </v-btn>
-                                <v-btn color="blue-darken-1" variant="text" @click="save">
-                                    Save
+                                <v-btn color="blue-darken-1" variant="text" @click="save" elevation="4">
+                                    Simpan
                                 </v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
-                    <v-dialog v-model="dialogDelete" max-width="500px">
-                        <v-card>
-                            <v-card-title class="text-h5">Are you sure you want to delete this item?</v-card-title>
+
+                    <!-- modal edit -->
+                    <v-dialog v-model="dialogEdit" max-width="500px">
+                        <v-card class="py-3 px-2">
+                            <v-card-title>
+                                <span class="text-h5">Edit Data Guru</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container class="py-4">
+                                    <v-form ref="form" v-model="isFormValid">
+                                        <v-text-field v-model="formsEdit.nameUser" label="Nama Guru"
+                                            :rules="nameRules"></v-text-field>
+                                        <v-text-field v-model="formsEdit.nip" label="NIP"
+                                            :rules="nipRules"></v-text-field>
+                                        <v-text-field v-model="formsEdit.password" label="Password"
+                                            :rules="passwordRules"></v-text-field>
+                                        <v-text-field v-model="formsEdit.email" label="Email"
+                                            :rules="emailRules"></v-text-field>
+                                        <v-text-field v-model="formsEdit.noHp" label="No Handphone"
+                                            :rules="noHpRules"></v-text-field>
+                                        <v-text-field v-model="formsEdit.bidangMataPelajaran"
+                                            label="Bidang Mata Pelajaran" :rules="bidangRules"></v-text-field>
+                                    </v-form>
+                                </v-container>
+                            </v-card-text>
+
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="blue-darken-1" variant="text" @click="closeDelete">Cancel</v-btn>
-                                <v-btn color="blue-darken-1" variant="text" @click="deleteItemConfirm">OK</v-btn>
+                                <v-btn color="error" variant="text" @click="closeEdit" elevation="4">
+                                    Batal
+                                </v-btn>
+                                <v-btn color="blue-darken-1" variant="text" @click="updateData" elevation="4">
+                                    Simpan Data
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
+
+                    <!-- modal hapus -->
+                    <v-dialog v-model="dialogDelete" max-width="500px">
+                        <v-card>
+                            <v-card-title class="text-h5">Apakah anda yakin ingin menghapus akun ini?</v-card-title>
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="error" variant="elevated" @click="closeDelete" elevation="4">Batal</v-btn>
+                                <v-btn color="blue-darken-1" variant="outlined" @click="deleteItemConfirm"
+                                    elevation="4">Hapus Data</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>
@@ -74,12 +117,10 @@
 
             <template v-slot:item.actions="{ item }">
                 <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
-                    @click="editItem(item.id)"></v-btn>
+                    @click="editItem(item.idUser)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
-                    @click="deleteItem(item.id)"></v-btn>
+                    @click="deleteItem(item.idUser)"></v-btn>
             </template>
-
-
         </v-data-table>
     </v-container>
 </template>
@@ -98,6 +139,20 @@ const forms = ref({
     bidangMataPelajaran: "",
 })
 
+const formsEdit = ref({
+    idUser: "",
+    nip: "",
+    nameUser: "",
+    password: "",
+    email: "",
+    noHp: "",
+    bidangMataPelajaran: "",
+})
+const deleteId = ref('');
+const searchData = ref("")
+
+const dataUser = ref([]);
+
 // rules
 const isFormValid = ref(false);
 const nameRules = [v => !!v || 'Nama Guru wajib diisi'];
@@ -114,14 +169,24 @@ const noHpRules = [
 ];
 const bidangRules = [v => !!v || 'Bidang Mata Pelajaran wajib diisi'];
 
+// dialog
 const dialogDelete = ref(false)
 const dialog = ref(false)
+const dialogEdit = ref(false)
 
 function close() {
     dialog.value = false
 }
 
+function closeDelete() {
+    dialogDelete.value = false
+}
 
+function closeEdit() {
+    dialogEdit.value = false
+}
+
+// judul tabel
 const headers = ref([
     {
         title: 'No',
@@ -163,9 +228,7 @@ const headers = ref([
     },
 ])
 
-const searchData = ref("")
 
-const dataUser = ref([]);
 
 onMounted(() => {
     loadData()
@@ -195,6 +258,7 @@ const filteredData = computed(() => {
     });
 });
 
+// menyimpan data
 const save = async () => {
     if (isFormValid.value) {
         try {
@@ -227,6 +291,77 @@ const save = async () => {
         }
     } else {
         console.log("Form tidak valid")
+    }
+}
+
+
+// mengambil data berdasarkan id untuk edit
+const editItem = async (id) => {
+    dialogEdit.value = true;
+
+    try {
+        const response = await axios.get(`http://localhost:3000/users/${id}`)
+        const data = response.data
+        // console.log(data)
+        formsEdit.value = {
+            idUser: data.idUser,
+            nip: data.nip,
+            nameUser: data.nameUser,
+            password: data.password,
+            email: data.email,
+            noHp: data.noHp,
+            bidangMataPelajaran: data.bidangMataPelajaran,
+        }
+    } catch (error) {
+        console.error("Error get data", error)
+    }
+}
+
+const updateData = async () => {
+    try {
+        const updatedData = {
+            nip: formsEdit.value.nip,
+            nameUser: formsEdit.value.nameUser,
+            password: formsEdit.value.password,
+            email: formsEdit.value.email,
+            noHp: formsEdit.value.noHp,
+            bidangMataPelajaran: formsEdit.value.bidangMataPelajaran,
+        }
+        // console.log(formsEdit.value.idUser, " dan ", updatedData.nameUser)
+
+        const response = await axios.put(`http://localhost:3000/users/${formsEdit.value.idUser}`, updatedData)
+        if (response.status === 200) {
+            console.log("Data updated successfully:", response.data)
+            loadData()
+            dialogEdit.value = false
+        } else {
+            console.error("Error update data:", response.data)
+        }
+    } catch (error) {
+        console.error("Error update data", error)
+    }
+}
+
+// mengambil data id untuk dihapus
+const deleteItem = (id) => {
+    deleteId.value = id;
+    // console.log(deleteId.value)
+    dialogDelete.value = true;
+}
+
+// confirm delete data
+const deleteItemConfirm = async () => {
+    try {
+        const response = await axios.delete(`http://localhost:3000/users/${deleteId.value}`)
+        if (response.status === 200) {
+            console.log("Data deleted successfully:", response.data);
+            loadData(); // Reload data after deletion
+            dialogDelete.value = false;
+        } else {
+            console.error("Error deleting data:", response.data);
+        }
+    } catch (error) {
+        console.log("Error deleting data:", error);
     }
 }
 
