@@ -6,6 +6,7 @@ import ListGuruView from "../views/ListGuruView.vue";
 import FaseFirstView from "../views/FaseMenu/FaseFirst.vue";
 import MataPelajaranView from "../views/FaseMenu/FaseMataPelajaran.vue";
 import Layout from "../layouts/DashboardLayout.vue";
+import { useAuthStore } from "../stores/useAuthStore";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -57,6 +58,26 @@ const router = createRouter({
       component: LoginView,
     },
   ],
+});
+
+router.beforeEach((to, from, next) => {
+  const userStore = useAuthStore();
+
+  if (to.name !== "Login" && !userStore.checkLogin()) {
+    next({ name: "Login" });
+  } else {
+    next();
+  }
+  // const isLoggedIn = localStorage.getItem("isLogin") === "true";
+  // if (to.name !== "Login" && !userStore.isLoggedIn) {
+  //   next({ name: "Login" });
+  // } else {
+  //   next();
+  // if (to.name !== "Login" && !isLoggedIn) {
+  //   next({ name: "Login" });
+  // } else {
+  //   next();
+  // }
 });
 
 export default router;

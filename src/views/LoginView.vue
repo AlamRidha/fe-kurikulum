@@ -17,6 +17,8 @@
                     </v-card-item>
                 </v-card>
             </v-col>
+            <!-- <v-btn class="mt-2" color="success" block @click="logout">Logout</v-btn>
+            <v-btn class="mt-2" color="success" block @click="ceklogin">Cek</v-btn> -->
             <iframe src="https://lottie.host/embed/70d73fed-70a2-43a8-9ab1-8d2c9958b907/4N3hPHRMNB.json"
                 style="border: none;" class="ms-8"></iframe>
         </v-row>
@@ -25,7 +27,9 @@
 
 <script setup>
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useAuthStore } from '../stores/useAuthStore';
+
+const userStore = useAuthStore();
 
 const forms = ref({
     nip: "",
@@ -33,8 +37,6 @@ const forms = ref({
 })
 
 const show = ref(false)
-
-const router = useRouter();
 
 const rules = [
     value => {
@@ -45,8 +47,11 @@ const rules = [
 ]
 
 function submitData() {
-    alert(JSON.stringify(forms.value))
-    router.push('/'); // Redirect to home page
-}
 
+    const nip = forms.value.nip
+    const password = forms.value.password
+
+    userStore.login(nip, password)
+
+}
 </script>
