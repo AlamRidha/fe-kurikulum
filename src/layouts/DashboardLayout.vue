@@ -11,7 +11,7 @@
 
         <v-navigation-drawer :width="250" v-model="drawer" class="pt-5">
             <v-list-item>
-                <p>Hi, {{ userStore.user }}</p>
+                <p>Hi, {{ nameUser }}</p>
             </v-list-item>
             <v-divider></v-divider>
             <v-list-item to="/fase" title="Fase" class="my-8">
@@ -47,13 +47,15 @@
 import { RouterView } from 'vue-router';
 import { ref, computed } from 'vue'
 import { useAuthStore } from '../stores/useAuthStore';
+import Cookies from "js-cookie";
+
 
 const userStore = useAuthStore();
-// const nameUser = userStore.user.nameUser
-// const nameUser = computed(() => userStore.user ? userStore.user.nameUser : 'User')
+const nameUser = userStore.user.nameUser
 const drawer = ref(null)
 
 function logout() {
     userStore.logout()
+    // console.log(userStore.user.nameUser)
 }
 </script>

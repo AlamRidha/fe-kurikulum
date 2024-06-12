@@ -6,8 +6,8 @@ import router from "../router";
 
 export const useAuthStore = defineStore("user", {
   state: () => ({
-    isLoggedIn: ref(false),
-    user: ref(null),
+    isLoggedIn: false,
+    user: null,
     // isLoggedIn: localStorage.getItem("isLogin") === "true" || false,
     // user: JSON.parse(localStorage.getItem("user")) || null,
   }),
@@ -26,7 +26,7 @@ export const useAuthStore = defineStore("user", {
           this.user = response.data;
           // localStorage.setItem("isLogin", true);
           // localStorage.setItem("user", JSON.stringify(response.data));
-          Cookies.set("user", response.data);
+          Cookies.set("user", JSON.stringify(response.data));
           console.log("Login berhasil");
           router.push("/fase");
         } else {
@@ -52,6 +52,7 @@ export const useAuthStore = defineStore("user", {
       if (userCook) {
         // localStorage.setItem("isLogin", true);
         this.isLoggedIn = true;
+        this.user = JSON.parse(userCook);
         return true;
       } else {
         return false;
