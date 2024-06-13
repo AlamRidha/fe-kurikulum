@@ -1,5 +1,4 @@
 import { defineStore } from "pinia";
-import { ref } from "vue";
 import Cookies from "js-cookie";
 import axios from "axios";
 import router from "../router";
@@ -8,8 +7,6 @@ export const useAuthStore = defineStore("user", {
   state: () => ({
     isLoggedIn: false,
     user: null,
-    // isLoggedIn: localStorage.getItem("isLogin") === "true" || false,
-    // user: JSON.parse(localStorage.getItem("user")) || null,
   }),
 
   actions: {

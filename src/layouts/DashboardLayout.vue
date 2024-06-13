@@ -4,14 +4,12 @@
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
             <v-app-bar-title>Perangkat Penyusunan Kurikulum Merdeka</v-app-bar-title>
             <v-spacer></v-spacer>
-            <v-btn variant="outlined">
-                <RouterLink to="/logout" style="text-decoration: none;">Logout</RouterLink>
-            </v-btn>
+            <p class="me-8 text-h6">Hi, {{ nameUser }}</p>
         </v-app-bar>
 
         <v-navigation-drawer :width="250" v-model="drawer" class="pt-5">
             <v-list-item>
-                <p>Hi, {{ nameUser }}</p>
+                <p>Selamat Datang</p>
             </v-list-item>
             <v-divider></v-divider>
             <v-list-item to="/fase" title="Fase" class="my-8">
@@ -45,9 +43,8 @@
 
 <script setup>
 import { RouterView } from 'vue-router';
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
 import { useAuthStore } from '../stores/useAuthStore';
-import Cookies from "js-cookie";
 
 
 const userStore = useAuthStore();

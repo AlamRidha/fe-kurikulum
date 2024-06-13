@@ -1,19 +1,19 @@
 <template>
     <v-container fluid>
         <MenuTitle msg="Menu | Fase" class="text-subtitle-1 font-weight-medium" />
-        <v-container class="elevation-5">
+        <!-- crooscheck kembali apakah perlu pakai elevation atau enggak -->
+        <v-container class="elevation-4 mt-3 displayContainer">
             <v-row>
-                <v-col cols="12" sm="3" v-for="i in  fase ">
+                <v-col cols="12" sm="4" v-for="i in  fase">
                     <v-sheet class="ma-2 pa-2">
-                        <v-card elevation="8">
+                        <v-card elevation="8" class="cardHeight">
                             <v-card-item>
                                 <v-card-title>{{ i.namaFase }}</v-card-title>
                                 <v-card-subtitle>SDN 138 Pekanbaru</v-card-subtitle>
-                                <!-- <v-img height="200px"
-                                        src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img> -->
-                                <v-card-actions>
-                                    <v-btn size="small" class="bg-success"
-                                        :to="`/fase/${i.idFase}/semester`">Pilih</v-btn>
+                                <v-img height="150px"
+                                    src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
+                                <v-card-actions class="justify-end">
+                                    <v-btn class="bg-success mt-5" :to="`/fase/${i.idFase}/semester`">Pilih</v-btn>
                                 </v-card-actions>
                             </v-card-item>
                         </v-card>
@@ -35,3 +35,14 @@ const fase = ref([
 ])
 
 </script>
+
+
+<style scoped>
+.displayContainer {
+    height: 500px !important;
+}
+
+.cardHeight {
+    height: 300px;
+}
+</style>
