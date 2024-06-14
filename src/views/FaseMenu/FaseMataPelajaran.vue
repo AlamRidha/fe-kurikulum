@@ -1,39 +1,26 @@
 <template>
-    <h1>Fase {{ $route.params.idFase }} dan Semester {{ $route.params.idSemester }}</h1>
-    <h4>Pilih Mata Pelajaran</h4>
-    <v-container class="">
-        <v-row v-if="$route.params.idFase == 1">
-            <v-col cols="auto" v-for="i in mataPelajaranFase1">
-                <v-card class="mx-auto" max-width="500" width="400" elevation="8" prepend-icon="mdi-account"
-                    :title="i.namaMataPelajaran"
-                    @click="console.log('helo ini fase ' + $route.params.idFase + ' di ' + i.namaMataPelajaran)">
+    <v-container fluid>
+        <MenuTitle msg="Menu | Fase | Semester | Matapelajaran" class="text-subtitle-1 font-weight-medium" />
+        <h5 class="text-h5"> Pilih Mata Pelajaran</h5>
+        <v-row class="mt-2">
+            <v-col cols="12" sm="4" v-for="i in mataPelajaran" :key="i.idMp">
+                <v-card class="mx-auto rounded-lg" width="350" height="250" elevation="8">
                     <v-card-item>
-                        <v-btn size="small" class="bg-success"
-                            :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${i.idMataPelajaran}`">Pilih</v-btn>
-                    </v-card-item>
-                </v-card>
-            </v-col>
-        </v-row>
-        <v-row v-else-if="$route.params.idFase == 2">
-            <v-col cols="auto" v-for="i in mataPelajaranFase2">
-                <v-card class="mx-auto" max-width="500" width="400" elevation="8" prepend-icon="mdi-account"
-                    :title="i.namaMataPelajaran"
-                    @click="console.log('helo ini fase ' + $route.params.idFase + ' di ' + i.namaMataPelajaran)">
-                    <v-card-item>
-                        <v-btn size="small" class="bg-success"
-                            :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${i.idMataPelajaran}`">Pilih</v-btn>
-                    </v-card-item>
-                </v-card>
-            </v-col>
-        </v-row>
-        <v-row v-else>
-            <v-col cols="auto" v-for="i in mataPelajaranFase3">
-                <v-card class="mx-auto" max-width="500" width="400" elevation="8" prepend-icon="mdi-account"
-                    :title="i.namaMataPelajaran"
-                    @click="console.log('helo ini fase ' + $route.params.idFase + ' di ' + i.namaMataPelajaran)">
-                    <v-card-item>
-                        <v-btn size="small" class="bg-success"
-                            :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${i.idMataPelajaran}`">Pilih</v-btn>
+                        <v-card-title>{{ i.namaMataPelajaran }}</v-card-title>
+                        <!-- <v-card-subtitle>{{ i.tahunAjaran }} /</v-card-subtitle> -->
+                        <v-card-subtitle>Tahun ajaran {{ formatTahunAjaran(i.tahunAjaran) }}</v-card-subtitle>
+                        <v-img height="130px"
+                            src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
+                        <v-card-actions class="justify-end">
+                            <v-btn size="small" class="bg-success"
+                                :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${i.idMp}/rpp-mp`">RPP
+                                &
+                                Kurikulum</v-btn>
+                            <!-- <v-btn size="small" class="bg-success"
+                                @click="console.log('idFase', $route.params.idFase, ' idSemester ', $route.params.idSemester, ' idMataPelajarn ', i.idMp)">RPP
+                                &
+                                Kurikulum</v-btn> -->
+                        </v-card-actions>
                     </v-card-item>
                 </v-card>
             </v-col>
@@ -42,57 +29,38 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue';
+import axios from 'axios';
+import { ref, onMounted } from 'vue';
+import { useRoute } from 'vue-router';
+import MenuTitle from "../../components/MenuTitle.vue"
+// ambil parameter id 
+const route = useRoute()
+const idSemester = route.params.idSemester
+const idFase = route.params.idFase
+const mataPelajaran = ref([])
 
-const idFase = ref("")
-const idSemester = ref("")
+const loadData = async () => {
+    try {
+        const response = await axios.get(`http://localhost:3000/fase/semester/${idSemester}/mp`)
+        mataPelajaran.value = response.data
+        console.log("Success get mata pelajaran data : ", response.data)
+    } catch (error) {
+        console.error("Error get data mata pelajaran", error)
+    }
+}
 
+const formatTahunAjaran = (tahunAjaran) => {
+    const nextYear = parseInt(tahunAjaran) + 1
+    return `${tahunAjaran} / ${nextYear}`;
+}
 
-const mataPelajaranFase1 = reactive([
-    { idMataPelajaran: 1, namaMataPelajaran: 'Matematika' },
-    { idMataPelajaran: 2, namaMataPelajaran: 'Bahasa Indonesia' },
-    { idMataPelajaran: 3, namaMataPelajaran: 'Bahasa Inggris' },
-    { idMataPelajaran: 4, namaMataPelajaran: 'Pendidikan Agama Islam dan Budi Pekerti' },
-    { idMataPelajaran: 5, namaMataPelajaran: 'PJOK' },
-    { idMataPelajaran: 6, namaMataPelajaran: 'Pendidikan Pancasila' },
-    { idMataPelajaran: 7, namaMataPelajaran: 'Pendidikan Jasmani Olahraga dan Kesehatan' },
-    { idMataPelajaran: 8, namaMataPelajaran: 'Seni Musik' },
-    { idMataPelajaran: 9, namaMataPelajaran: 'Seni Rupa' },
-    { idMataPelajaran: 10, namaMataPelajaran: 'Seni Teater' },
-    { idMataPelajaran: 11, namaMataPelajaran: 'Seni Tari' },
-])
+function cekParams() {
+    console.log('Fase : ' + idFase + ' Semester : ' + idSemester)
+}
 
-const mataPelajaranFase2 = reactive([
-    { idMataPelajaran: 1, namaMataPelajaran: 'Pendidikan Pancasila' },
-    { idMataPelajaran: 2, namaMataPelajaran: 'IPAS' },
-    { idMataPelajaran: 3, namaMataPelajaran: 'Bahasa Indonesia' },
-    { idMataPelajaran: 4, namaMataPelajaran: 'Pendidikan Agama Islam dan Budi Pekerti' },
-    { idMataPelajaran: 5, namaMataPelajaran: 'Matematika' },
-    { idMataPelajaran: 6, namaMataPelajaran: 'Bahasa Inggris' },
-    { idMataPelajaran: 7, namaMataPelajaran: 'Pendidikan Jasmani Olahraga dan Kesehatan' },
-    { idMataPelajaran: 8, namaMataPelajaran: 'Seni Musik' },
-    { idMataPelajaran: 9, namaMataPelajaran: 'Seni Rupa' },
-    { idMataPelajaran: 10, namaMataPelajaran: 'Seni Teater' },
-    { idMataPelajaran: 11, namaMataPelajaran: 'Seni Tari' },
-    { idMataPelajaran: 12, namaMataPelajaran: 'Budaya Melayu Riau' },
-    { idMataPelajaran: 13, namaMataPelajaran: 'Pendidikan Lingkungan Hidup' },
-])
-
-const mataPelajaranFase3 = reactive([
-    { idMataPelajaran: 1, namaMataPelajaran: 'Pendidikan Pancasila' },
-    { idMataPelajaran: 2, namaMataPelajaran: 'IPAS' },
-    { idMataPelajaran: 3, namaMataPelajaran: 'Bahasa Indonesia' },
-    { idMataPelajaran: 4, namaMataPelajaran: 'Pendidikan Agama Islam dan Budi Pekerti' },
-    { idMataPelajaran: 5, namaMataPelajaran: 'Matematika' },
-    { idMataPelajaran: 6, namaMataPelajaran: 'Bahasa Inggris' },
-    { idMataPelajaran: 7, namaMataPelajaran: 'Pendidikan Jasmani Olahraga dan Kesehatan' },
-    { idMataPelajaran: 8, namaMataPelajaran: 'Seni Musik' },
-    { idMataPelajaran: 9, namaMataPelajaran: 'Seni Rupa' },
-    { idMataPelajaran: 10, namaMataPelajaran: 'Seni Teater' },
-    { idMataPelajaran: 11, namaMataPelajaran: 'Seni Tari' },
-    { idMataPelajaran: 12, namaMataPelajaran: 'Budaya Melayu Riau' },
-    { idMataPelajaran: 13, namaMataPelajaran: 'Pendidikan Lingkungan Hidup' },
-])
+onMounted(() => {
+    loadData()
+})
 
 
 </script>

@@ -101,13 +101,14 @@
 
                     <!-- modal hapus -->
                     <v-dialog v-model="dialogDelete" max-width="500px">
-                        <v-card>
-                            <v-card-title class="text-h5">Apakah anda yakin ingin menghapus akun ini?</v-card-title>
+                        <v-card class="pa-5 rounded-lg">
+                            <v-card-title class="text-h5 text-center">Apakah Anda Yakin <br> Ingin Menghapus Akun
+                                Ini?</v-card-title>
                             <v-card-actions>
                                 <v-spacer></v-spacer>
                                 <v-btn color="error" variant="elevated" @click="closeDelete" elevation="4">Batal</v-btn>
                                 <v-btn color="blue-darken-1" variant="outlined" @click="deleteItemConfirm"
-                                    elevation="4">Hapus Data</v-btn>
+                                    elevation="4">Hapus Akun</v-btn>
                                 <v-spacer></v-spacer>
                             </v-card-actions>
                         </v-card>

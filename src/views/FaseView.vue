@@ -2,11 +2,11 @@
     <v-container fluid>
         <MenuTitle msg="Menu | Fase" class="text-subtitle-1 font-weight-medium" />
         <!-- crooscheck kembali apakah perlu pakai elevation atau enggak -->
-        <v-container class="elevation-4 mt-3 displayContainer">
+        <v-container class=" mt-3 displayContainer">
             <v-row>
-                <v-col cols="12" sm="4" v-for="i in  fase">
+                <v-col cols="12" sm="4" v-for="i in fase" :key="i.idFase">
                     <v-sheet class="ma-2 pa-2">
-                        <v-card elevation="8" class="cardHeight">
+                        <v-card elevation="8" class="cardHeight rounded-xl">
                             <v-card-item>
                                 <v-card-title>{{ i.namaFase }}</v-card-title>
                                 <v-card-subtitle>SDN 138 Pekanbaru</v-card-subtitle>
@@ -25,14 +25,27 @@
 </template>
 
 <script setup>
+import axios from "axios";
 import MenuTitle from "../components/MenuTitle.vue"
-import { ref } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 
-const fase = ref([
-    { idFase: 1, namaFase: 'Fase 1', },
-    { idFase: 2, namaFase: 'Fase 2', },
-    { idFase: 3, namaFase: 'Fase 3', },
-])
+const fase = ref([])
+
+const loadData = async () => {
+    try {
+        const response = await axios.get('http://localhost:3000/fase')
+        const data = response.data
+        fase.value = data
+        // console.log(data)
+    } catch (error) {
+        console.error("Error get data fase", error)
+    }
+}
+
+onMounted(() => {
+    loadData()
+})
+
 
 </script>
 
