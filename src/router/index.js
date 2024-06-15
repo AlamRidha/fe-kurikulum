@@ -7,6 +7,7 @@ import SemesterView from "../views/FaseMenu/Semester.vue";
 import MataPelajaranView from "../views/FaseMenu/FaseMataPelajaran.vue";
 import CapaianPembelajaranView from "../views/FaseMenu/CapaianPembelajaran.vue";
 import TujuanPembelajaranView from "../views/FaseMenu/TujuanPembelajaran.vue";
+import AlurTujuanPembelajaranView from "../views/FaseMenu/AlurTujuanPembelajaran.vue";
 import RppMpView from "../views/FaseMenu/RppMp.vue";
 import Layout from "../layouts/DashboardLayout.vue";
 import { useAuthStore } from "../stores/useAuthStore";
@@ -52,6 +53,11 @@ const router = createRouter({
           path: "fase/:idFase/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/tujuan-pembelajaran",
           name: "Tujuan Pembelajaran",
           component: TujuanPembelajaranView,
+        },
+        {
+          path: "fase/:idFase/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/alur_tujuan-pembelajaran",
+          name: "Alur Tujuan Pembelajaran",
+          component: AlurTujuanPembelajaranView,
         },
         {
           path: "/datalistguru",
