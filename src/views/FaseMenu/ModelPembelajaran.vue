@@ -366,7 +366,10 @@ import MenuTitle from '../../components/MenuTitle.vue';
 import { ref, onMounted } from 'vue';
 import axios from "axios";
 import { useRoute } from 'vue-router';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 
+const namaMp = ref("")
 const route = useRoute()
 const idMp = route.params.idMp
 const modul_pembelajaran = ref([])
@@ -672,7 +675,21 @@ const showItem = async (id) => {
 };
 
 
+const getMatapelajaran = async () => {
+    try {
+        const response = await axios.get(`http://localhost:3000/fase/mp/${idMp}`)
+        const data = response.data
+        namaMp.value = data.namaMataPelajaran
+        // console.log(namaMp.value)
+        return data
+    } catch (error) {
+        console.error("Error get data", error)
+    }
+}
+
+
 onMounted(() => {
+    getMatapelajaran()
     getCapaian()
     loadData()
 })

@@ -12,6 +12,12 @@
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-spacer></v-spacer>
 
+                    <!-- Tombol Download PDF -->
+                    <v-btn class="mb-2 bg-green me-2" color="white" dark @click="downloadPDF"
+                        prepend-icon="mdi mdi-file">
+                        Download PDF
+                    </v-btn>
+
                     <!-- modal tambah -->
                     <v-dialog v-model="dialog" max-width="650px">
                         <template v-slot:activator="{ props }">
@@ -116,9 +122,12 @@ import MenuTitle from '../../components/MenuTitle.vue';
 import { ref, onMounted } from 'vue';
 import axios from "axios";
 import { useRoute } from 'vue-router';
+import { jsPDF } from 'jspdf';
+import 'jspdf-autotable';
 
 const route = useRoute()
 const idMp = route.params.idMp
+const namaMp = ref("")
 
 const tujuan_pembelajaran = ref([])
 const capaian_pembelajaran = ref([])
@@ -298,7 +307,58 @@ const updateData = async () => {
     }
 }
 
+const downloadPDF = () => {
+    const doc = new jsPDF()
+
+    // header table
+    const headers = [['No', 'Elemen Capaian Pembelajaran', 'Tujuan Pembelajaran']]
+
+    // Menambahkan judul besar
+    const title = 'Tujuan Pembelajaran';
+    doc.setFontSize(18);
+    doc.text(title, 78, 15);
+
+    const mapel = namaMp.value
+    doc.setFontSize(18);
+    doc.text(mapel, 83, 25);
+
+    const sekolah = "Sekolah Dasar Negeri 138 Pekanbaru"
+    doc.setFontSize(18);
+    doc.text(sekolah, 60, 35);
+
+    // data tabel
+    const data = tujuan_pembelajaran.value.map((item, index) =>
+        [index + 1, item.elemen_capaian, item.tujuan_pembelajaran]
+    )
+
+    // masukkan data tabel kedalam dokumen pdf
+    doc.autoTable({
+        head: headers,
+        body: data,
+        startY: 45,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [22, 160, 133], halign: 'center' }
+    });
+
+    // Menyimpan dokumen PDF
+    doc.save('tujuan_pembelajaran.pdf');
+}
+
+const getMatapelajaran = async () => {
+    try {
+        const response = await axios.get(`http://localhost:3000/fase/mp/${idMp}`)
+        const data = response.data
+        namaMp.value = data.namaMataPelajaran
+        // console.log(namaMp.value)
+        return data
+    } catch (error) {
+        console.error("Error get data", error)
+    }
+}
+
+
 onMounted(() => {
+    getMatapelajaran()
     getCapaian()
     loadData()
 })
