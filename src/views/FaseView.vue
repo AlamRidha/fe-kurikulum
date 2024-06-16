@@ -13,7 +13,8 @@
                                 <v-img height="150px"
                                     src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
                                 <v-card-actions class="justify-end">
-                                    <v-btn class="bg-success mt-5" :to="`/fase/${i.idFase}/semester`">Pilih</v-btn>
+                                    <v-btn class="bg-success mt-5 rounded-xl"
+                                        :to="`/fase/${i.idFase}/semester`">Pilih</v-btn>
                                 </v-card-actions>
                             </v-card-item>
                         </v-card>

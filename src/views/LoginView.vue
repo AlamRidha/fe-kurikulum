@@ -2,7 +2,7 @@
     <v-container>
         <v-row justify="center" class="mt-11">
             <v-col cols="6" class="">
-                <v-card class="pa-10 mt-16" elevation="9">
+                <v-card class="pa-10 mt-16 rounded-xl" elevation="9">
                     <v-card-title>Perangkat Penyusunan Kurikulum Merdeka</v-card-title>
                     <v-card-subtitle>Login</v-card-subtitle>
                     <v-card-item>
@@ -12,7 +12,7 @@
                             <v-text-field v-model="forms.password" :rules="rules" label="Password"
                                 :type="show ? 'text' : 'password'" :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
                                 @click:append="show = !show"></v-text-field>
-                            <v-btn class="mt-2" color="success" type="submit" block>Login</v-btn>
+                            <v-btn class="mt-2 rounded-pill" color="success" type="submit" block>Login</v-btn>
                         </v-form>
                     </v-card-item>
                 </v-card>

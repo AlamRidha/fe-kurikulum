@@ -12,7 +12,7 @@
                         <v-img height="130px"
                             src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
                         <v-card-actions class="justify-end">
-                            <v-btn size="small" class="bg-success"
+                            <v-btn size="small" class="bg-success rounded-xl"
                                 :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${i.idMp}/rpp-mp`">RPP
                                 &
                                 Kurikulum</v-btn>
