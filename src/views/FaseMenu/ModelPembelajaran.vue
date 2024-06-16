@@ -324,7 +324,9 @@
                                         </v-col>
                                         <v-col cols="8">
                                             <v-sheet class=" pa-1 text-justify">
-                                                {{ dataShow.kegiatan_pembelajaran }}
+                                                <!-- {{ dataShow.kegiatan_pembelajaran }} -->
+                                                <div class="text-justify"
+                                                    v-html="formattedText(dataShow.kegiatan_pembelajaran)"></div>
                                             </v-sheet>
                                         </v-col>
                                     </v-row>
@@ -333,7 +335,11 @@
 
                             <v-card-actions>
                                 <v-spacer></v-spacer>
-                                <v-btn color="error" variant="text" @click="closeShow" elevation="4">
+                                <v-btn color="error" variant="text" @click="closeShow" elevation="4"
+                                    class="mb-3 rounded-lg" prepend-icon="mdi-close-circle-outline">
+                                    <template v-slot:prepend>
+                                        <v-icon color="error"></v-icon>
+                                    </template>
                                     Tutup
                                 </v-btn>
                             </v-card-actions>
@@ -366,6 +372,10 @@ const idMp = route.params.idMp
 const modul_pembelajaran = ref([])
 const capaian_pembelajaran = ref([])
 const deskripsiCapaian = ref([]);
+
+function formattedText(text) {
+    return text.replace(/\n/g, "<br>");
+}
 
 const forms = ref({
     tahun_penyusunan: "",

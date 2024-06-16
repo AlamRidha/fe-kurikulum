@@ -116,7 +116,7 @@
                 </v-toolbar>
             </template>
 
-            <template v-slot:item.actions="{ item }">
+            <template v-slot:item.aksi="{ item }">
                 <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
                     @click="editItem(item.idUser)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
@@ -223,8 +223,9 @@ const headers = ref([
         sortable: false,
     },
     {
-        title: 'Actions',
-        key: 'actions',
+        title: 'Aksi',
+        align: 'center',
+        key: 'aksi',
         sortable: false
     },
 ])
@@ -250,11 +251,14 @@ const loadData = async () => {
 const filteredData = computed(() => {
     return dataUser.value.filter((item) => {
         return (
-            item.nameUser.toLowerCase().includes(searchData.value.toLowerCase()) ||
-            item.nip.toLowerCase().includes(searchData.value.toLowerCase()) ||
-            item.email.toLowerCase().includes(searchData.value.toLowerCase()) ||
-            item.noHp.toLowerCase().includes(searchData.value.toLowerCase()) ||
-            item.bidangMataPelajaran.toLowerCase().includes(searchData.value.toLowerCase())
+            // filter agar id admin tidak nampil di data
+            item.idUser !== 1 && (
+                item.nameUser.toLowerCase().includes(searchData.value.toLowerCase()) ||
+                item.nip.toLowerCase().includes(searchData.value.toLowerCase()) ||
+                item.email.toLowerCase().includes(searchData.value.toLowerCase()) ||
+                item.noHp.toLowerCase().includes(searchData.value.toLowerCase()) ||
+                item.bidangMataPelajaran.toLowerCase().includes(searchData.value.toLowerCase())
+            )
         );
     });
 });

@@ -13,7 +13,7 @@
                     <v-spacer></v-spacer>
 
                     <!-- modal tambah -->
-                    <v-dialog v-model="dialog" max-width="550px">
+                    <v-dialog v-model="dialog" max-width="650px">
                         <template v-slot:activator="{ props }">
                             <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props" prepend-icon="mdi mdi-plus">
                                 Tambah Data
@@ -28,8 +28,9 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="forms.tahap" label="Tahap"></v-text-field>
-                                        <v-text-field v-model="forms.alur_tujuan_pembelajaran"
-                                            label="Alur Tujuan Pembelajaran"></v-text-field>
+                                        <textarea v-model="forms.alur_tujuan_pembelajaran" cols="65" rows="10"
+                                            class="border-sm elevation-2 pa-2" placeholder="Alur Tujuan Pembelajaran"
+                                            label="Alur Tujuan Pembelajaran"></textarea>
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -57,8 +58,9 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="formsEdit.tahap" label="Tahap"></v-text-field>
-                                        <v-text-field v-model="formsEdit.alur_tujuan_pembelajaran"
-                                            label="Alur Tujuan Pembelajaran"></v-text-field>
+                                        <textarea v-model="formsEdit.alur_tujuan_pembelajaran" cols="65" rows="10"
+                                            class="border-sm elevation-2 pa-2"
+                                            label="Alur Tujuan Pembelajaran"></textarea>
                                     </v-form>
                                 </v-container>
                             </v-card-text>

@@ -158,10 +158,15 @@ const headers = ref([
     {
         title: 'Link Buku',
         key: 'linkBuku',
-        align: 'start',
+        align: 'center',
         sortable: false,
     },
-    { title: 'Aksi', key: 'actions', sortable: false, },
+    {
+        title: 'Aksi',
+        key: 'actions',
+        sortable: false,
+        align: 'center'
+    },
 ])
 
 const dataBuku = ref([]);

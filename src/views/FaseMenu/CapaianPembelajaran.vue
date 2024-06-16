@@ -6,6 +6,14 @@
             <template v-slot:item.no="{ index }">
                 {{ index + 1 }} </template>
 
+            <template v-slot:item.capaian_pembelajaran="{ item }">
+                <p class="text-justify my-2 me-2" style="max-width: 750px;">{{ item.capaian_pembelajaran }}</p>
+            </template>
+
+            <template v-slot:item.elemen="{ item }">
+                <p class="text-justify my-2 me-2" style="max-width: 750px;">{{ item.elemen }}</p>
+            </template>
+
             <template v-slot:top>
                 <v-toolbar flat>
                     <v-toolbar-title>Data Capaian Pembelajaran</v-toolbar-title>
@@ -13,7 +21,7 @@
                     <v-spacer></v-spacer>
 
                     <!-- modal tambah -->
-                    <v-dialog v-model="dialog" max-width="550px">
+                    <v-dialog v-model="dialog" max-width="650px">
                         <template v-slot:activator="{ props }">
                             <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props" prepend-icon="mdi mdi-plus">
                                 Tambah Data
@@ -28,8 +36,9 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="forms.elemen" label="Elemen"></v-text-field>
-                                        <v-text-field v-model="forms.capaian_pembelajaran"
-                                            label="Capaian Pembelajaran"></v-text-field>
+                                        <textarea v-model="forms.capaian_pembelajaran" cols="65" rows="10"
+                                            class="border-sm elevation-2 pa-2" label="Capaian Pembelajaran"
+                                            placeholder="Capaian Pembelajaran"></textarea>
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -57,8 +66,8 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="formsEdit.elemen" label="Elemen"></v-text-field>
-                                        <v-text-field v-model="formsEdit.capaian_pembelajaran"
-                                            label="Capaian Pembelajaran"></v-text-field>
+                                        <textarea v-model="formsEdit.capaian_pembelajaran" cols="65" rows="10"
+                                            class="border-sm elevation-2 pa-2" label="Capaian Pembelajaran"></textarea>
                                         <!-- <v-text-field v-model="formsEdit.capaian_pembelajaran"
                                             label="Capaian Pembelajaran" :style="{ height: '500px' }"></v-text-field> -->
 

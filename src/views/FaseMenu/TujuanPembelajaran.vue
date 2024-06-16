@@ -13,7 +13,7 @@
                     <v-spacer></v-spacer>
 
                     <!-- modal tambah -->
-                    <v-dialog v-model="dialog" max-width="550px">
+                    <v-dialog v-model="dialog" max-width="650px">
                         <template v-slot:activator="{ props }">
                             <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props" prepend-icon="mdi mdi-plus">
                                 Tambah Data
@@ -29,9 +29,10 @@
                                     <v-form ref="form">
                                         <v-select v-model="forms.elemen_capaian" :items="elemenList"
                                             label="Elemen Capaian Pembelajaran"></v-select>
-                                        <textarea name="tujuan_pembelajaran" cols="54" rows="10"
+                                        <textarea name="tujuan_pembelajaran" cols="65" rows="10"
                                             v-model="forms.tujuan_pembelajaran" label="Tujuan Pembelajaran"
-                                            placeholder="Tujuan Pembelajaran" class="border-sm elevation-2"></textarea>
+                                            placeholder="Tujuan Pembelajaran"
+                                            class="border-sm elevation-2 pa-2"></textarea>
                                         <!-- <v-text-field v-model="forms.tujuan_pembelajaran"
                                             label="Tujuan Pembelajaran"></v-text-field> -->
 
@@ -63,9 +64,10 @@
                                     <v-form ref="form">
                                         <v-select v-model="formsEdit.elemen_capaian" :items="elemenList"
                                             label="Elemen Capaian Pembelajaran"></v-select>
-                                        <textarea name="tujuan_pembelajaran" cols="54" rows="10"
+                                        <textarea name="tujuan_pembelajaran" cols="65" rows="10"
                                             v-model="formsEdit.tujuan_pembelajaran" label="Tujuan Pembelajaran"
-                                            placeholder="Tujuan Pembelajaran" class="border-sm elevation-2"></textarea>
+                                            placeholder="Tujuan Pembelajaran"
+                                            class="border-sm elevation-2 pa-2"></textarea>
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -121,6 +123,10 @@ const idMp = route.params.idMp
 const tujuan_pembelajaran = ref([])
 const capaian_pembelajaran = ref([])
 const elemenList = ref([]);
+
+function formattedText(text) {
+    return text.replace(/\n/g, "<br>");
+}
 
 const forms = ref({
     elemen_capaian: "",
