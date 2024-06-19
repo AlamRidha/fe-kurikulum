@@ -31,7 +31,7 @@
                     <!-- Modal Tambah -->
                     <v-dialog v-model="dialog" max-width="500px">
                         <template v-slot:activator="{ props }">
-                            <v-btn class="mb-2" color="primary" dark v-bind="props">
+                            <v-btn class="mb-2" color="primary" variant="outlined" dark v-bind="props">
                                 Tambah Data Buku
                             </v-btn>
                         </template>

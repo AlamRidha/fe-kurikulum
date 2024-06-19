@@ -22,7 +22,8 @@
                     <!-- modal tambah -->
                     <v-dialog v-model="dialog" max-width="550px">
                         <template v-slot:activator="{ props }">
-                            <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props" prepend-icon="mdi mdi-plus">
+                            <v-btn class="mb-2" variant="outlined" color="primary" dark v-bind="props"
+                                prepend-icon="mdi mdi-plus">
                                 Tambah Data Guru
                             </v-btn>
                         </template>
@@ -76,7 +77,9 @@
                                         <v-text-field v-model="formsEdit.nip" label="NIP"
                                             :rules="nipRules"></v-text-field>
                                         <v-text-field v-model="formsEdit.password" label="Password"
-                                            :rules="passwordRules"></v-text-field>
+                                            :rules="passwordRules" :type="show ? 'text' : 'password'"
+                                            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                                            @click:append="show = !show"></v-text-field>
                                         <v-text-field v-model="formsEdit.email" label="Email"
                                             :rules="emailRules"></v-text-field>
                                         <v-text-field v-model="formsEdit.noHp" label="No Handphone"
@@ -131,6 +134,7 @@ import axios from "axios";
 import MenuTitle from "../components/MenuTitle.vue"
 import { ref, onMounted, computed } from "vue"
 
+const show = ref(false)
 const forms = ref({
     nip: "",
     nameUser: "",

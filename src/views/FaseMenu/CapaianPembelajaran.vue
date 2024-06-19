@@ -30,7 +30,8 @@
                     <!-- modal tambah -->
                     <v-dialog v-model="dialog" max-width="650px">
                         <template v-slot:activator="{ props }">
-                            <v-btn class="mb-2 bg-orange" color="white" dark v-bind="props" prepend-icon="mdi mdi-plus">
+                            <v-btn class="mb-2" color="primary" dark v-bind="props" prepend-icon="mdi mdi-plus"
+                                variant="outlined">
                                 Tambah Data
                             </v-btn>
                         </template>
