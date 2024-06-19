@@ -222,7 +222,7 @@ const headers = ref([
         sortable: false,
     },
     {
-        title: 'Bidang Mata Pelajaran',
+        title: 'Jabatan',
         key: 'bidangMataPelajaran',
         sortable: false,
     },

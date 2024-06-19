@@ -110,6 +110,37 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+
+                    <!-- dialog show -->
+                    <v-dialog v-model="dialogShow" max-width="500px">
+                        <v-card>
+                            <v-card-title>
+                                <span class="text-h5">{{ formTitle }}</span>
+                            </v-card-title>
+                            <v-card-text>
+                                <v-container>
+                                    <v-row>
+                                        <v-col cols="12">
+                                            <v-text-field v-model="forms.namaBuku" label="Nama Buku"></v-text-field>
+                                        </v-col>
+                                        <v-col cols="12">
+                                            <v-text-field v-model="forms.linkBuku" label="Link Buku"></v-text-field>
+                                        </v-col>
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="blue-darken-1" variant="text" @click="cancelData">
+                                    Batal
+                                </v-btn>
+                                <v-btn color="blue-darken-1" variant="text" @click="submitData">
+                                    Save
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-toolbar>
             </template>
             <template v-slot:item.actions="{ item }">
@@ -131,6 +162,8 @@ const dialog = ref(false);
 const dialogEdit = ref(false);
 const dialogDelete = ref(false);
 const deleteId = ref('');
+const dialogShow = ref(false)
+
 
 const forms = ref({
     idBuku: '',
@@ -203,6 +236,10 @@ const cancelEdit = () => {
 
 const closeDelete = () => {
     dialogDelete.value = false;
+}
+
+function closeShow() {
+    dialogShow.value = false;
 }
 
 // fungsi load data dengan async

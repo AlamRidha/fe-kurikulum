@@ -2,7 +2,7 @@
     <v-layout>
         <v-app-bar>
             <v-app-bar-nav-icon @click="drawer = !drawer"></v-app-bar-nav-icon>
-            <v-app-bar-title>Perangkat Penyusunan Kurikulum Merdeka</v-app-bar-title>
+            <v-app-bar-title>Aplikasi Penyusunan Rencana Pembelajaran & Kurikulum</v-app-bar-title>
             <v-spacer></v-spacer>
             <p class="me-8 text-h6">Hi, {{ nameUser }}</p>
         </v-app-bar>
@@ -25,6 +25,11 @@
             <v-list-item to="/datalistguru" title="List Guru" class="my-8">
                 <template v-slot:prepend>
                     <v-icon icon="mdi mdi-account-card" />
+                </template>
+            </v-list-item>
+            <v-list-item to="/profilpelajarpancasila" title="Profil Pelajar" class="my-8">
+                <template v-slot:prepend>
+                    <v-icon icon="mdi mdi-bag-personal" />
                 </template>
             </v-list-item>
             <v-list-item title="Logout" class="my-8" @click="logout">

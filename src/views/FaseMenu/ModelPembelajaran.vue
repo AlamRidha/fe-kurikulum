@@ -36,8 +36,10 @@
                                             label="Alokasi Waktu"></v-text-field>
                                         <v-text-field v-model="forms.kompetensi_awal"
                                             label="Kompetensi Awal"></v-text-field>
-                                        <v-text-field v-model="forms.profil_pancasila"
-                                            label="Profil Pancasila"></v-text-field>
+                                        <v-combobox v-model="forms.profil_pancasila" :items="namaDimensi"
+                                            label="Pilih Profil Pancasila" multiple chips></v-combobox>
+                                        <!-- <v-text-field v-model="forms.profil_pancasila"
+                                            label="Profil Pancasila"></v-text-field> -->
                                         <v-text-field v-model="forms.sarana_prasarana"
                                             label="Sarana dan Prasarana"></v-text-field>
                                         <v-text-field v-model="forms.model_pembelajaran"
@@ -86,8 +88,10 @@
                                             label="Alokasi Waktu"></v-text-field>
                                         <v-text-field v-model="formsEdit.kompetensi_awal"
                                             label="Kompetensi Awal"></v-text-field>
-                                        <v-text-field v-model="formsEdit.profil_pancasila"
-                                            label="Profil Pancasila"></v-text-field>
+                                        <!-- <v-text-field v-model="formsEdit.profil_pancasila"
+                                            label="Profil Pancasila"></v-text-field> -->
+                                        <v-combobox v-model="formsEdit.profil_pancasila" :items="namaDimensi"
+                                            label="Pilih Profil Pancasila" multiple></v-combobox>
                                         <v-text-field v-model="formsEdit.sarana_prasarana"
                                             label="Sarana dan Prasarana"></v-text-field>
                                         <v-text-field v-model="formsEdit.model_pembelajaran"
@@ -366,6 +370,7 @@
 import MenuTitle from '../../components/MenuTitle.vue';
 import { ref, onMounted } from 'vue';
 import axios from "axios";
+import { formattedText } from '../../helper/index';
 import { useRoute } from 'vue-router';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
@@ -376,10 +381,12 @@ const idMp = route.params.idMp
 const modul_pembelajaran = ref([])
 const capaian_pembelajaran = ref([])
 const deskripsiCapaian = ref([]);
+const dataProfilPelajar = ref([])
+const namaDimensi = ref([])
 
-function formattedText(text) {
-    return text.replace(/\n/g, "<br>");
-}
+// function formattedText(text) {
+//     return text.replace(/\n/g, "<br>");
+// }
 
 const forms = ref({
     tahun_penyusunan: "",
@@ -387,7 +394,7 @@ const forms = ref({
     tema: "",
     alokasi_waktu: "",
     kompetensi_awal: "",
-    profil_pancasila: "",
+    profil_pancasila: [],
     sarana_prasarana: "",
     model_pembelajaran: "",
     tujuan_bab: "",
@@ -403,7 +410,7 @@ const formsEdit = ref({
     tema: "",
     alokasi_waktu: "",
     kompetensi_awal: "",
-    profil_pancasila: "",
+    profil_pancasila: [],
     sarana_prasarana: "",
     model_pembelajaran: "",
     tujuan_bab: "",
@@ -524,7 +531,7 @@ const save = async () => {
             tema: forms.value.tema,
             alokasi_waktu: forms.value.alokasi_waktu,
             kompetensi_awal: forms.value.kompetensi_awal,
-            profil_pancasila: forms.value.profil_pancasila,
+            profil_pancasila: forms.value.profil_pancasila.join(", ").toString(),
             sarana_prasarana: forms.value.sarana_prasarana,
             model_pembelajaran: forms.value.model_pembelajaran,
             tujuan_bab: forms.value.tujuan_bab,
@@ -593,6 +600,9 @@ const editItem = async (id) => {
         const response = await axios.get(`http://localhost:3000/kurikulum/modul_pembelajaran/${id}`)
         const data = response.data
         // console.log(data)
+        const extractedData = data.profil_pancasila.split(", ")
+        console.log(extractedData)
+
         formsEdit.value = {
             idModul: data.idModul,
             tahun_penyusunan: data.tahun_penyusunan,
@@ -600,7 +610,7 @@ const editItem = async (id) => {
             tema: data.tema,
             alokasi_waktu: data.alokasi_waktu,
             kompetensi_awal: data.kompetensi_awal,
-            profil_pancasila: data.profil_pancasila,
+            profil_pancasila: extractedData,
             sarana_prasarana: data.sarana_prasarana,
             model_pembelajaran: data.model_pembelajaran,
             tujuan_bab: data.tujuan_bab,
@@ -622,7 +632,8 @@ const updateData = async () => {
             tema: formsEdit.value.tema,
             alokasi_waktu: formsEdit.value.alokasi_waktu,
             kompetensi_awal: formsEdit.value.kompetensi_awal,
-            profil_pancasila: formsEdit.value.profil_pancasila,
+            // profil_pancasila: formsEdit.value.profil_pancasila
+            profil_pancasila: formsEdit.value.profil_pancasila.join(", ").toString(),
             sarana_prasarana: formsEdit.value.sarana_prasarana,
             model_pembelajaran: formsEdit.value.model_pembelajaran,
             tujuan_bab: formsEdit.value.tujuan_bab,
@@ -689,7 +700,24 @@ const getMatapelajaran = async () => {
 }
 
 
+const getProfilPelajar = async () => {
+    try {
+        const response = await axios.get("http://localhost:3000/profilpelajar")
+        const data = response.data
+        dataProfilPelajar.value = data
+
+        // Mengambil data dimensi dari profil pelajar
+        const extractedData = data.map(item => item.dimensi)
+        namaDimensi.value = extractedData
+        // console.log("Profil Pelajar Pancasila : ", namaDimensi.value)
+    } catch (error) {
+        console.error(error)
+    }
+}
+
+
 onMounted(() => {
+    getProfilPelajar()
     getMatapelajaran()
     getCapaian()
     loadData()
