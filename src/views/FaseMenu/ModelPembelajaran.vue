@@ -50,10 +50,12 @@
                                         <v-text-field v-model="forms.deskripsi_cp"
                                             label="Deskripsi Capaian Pembelajaran"></v-text-field>
                                         <v-text-field v-model="forms.pemahaman" label="Pemahaman"></v-text-field>
-                                        <textarea v-model="forms.kegiatan_pembelajaran" cols="50" rows="10"
+                                        <v-textarea v-model="forms.kegiatan_pembelajaran" label="Kegiatan Pembelajaran"
+                                            class="rounded-xl" bg-color="grey-lighten-2"></v-textarea>
+                                        <!-- <textarea v-model="forms.kegiatan_pembelajaran" cols="50" rows="10"
                                             name="Kegiatan Pembelajaran" label="Kegiatan Pembelajaran"
                                             placeholder="Kegiatan Pembelajaran"
-                                            class="border-sm elevation-2 pa-2"></textarea>
+                                            class="border-sm elevation-2 pa-2"></textarea> -->
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -91,7 +93,7 @@
                                         <!-- <v-text-field v-model="formsEdit.profil_pancasila"
                                             label="Profil Pancasila"></v-text-field> -->
                                         <v-combobox v-model="formsEdit.profil_pancasila" :items="namaDimensi"
-                                            label="Pilih Profil Pancasila" multiple></v-combobox>
+                                            label="Pilih Profil Pancasila" multiple chips></v-combobox>
                                         <v-text-field v-model="formsEdit.sarana_prasarana"
                                             label="Sarana dan Prasarana"></v-text-field>
                                         <v-text-field v-model="formsEdit.model_pembelajaran"
@@ -100,10 +102,13 @@
                                         <v-text-field v-model="formsEdit.deskripsi_cp"
                                             label="Deskripsi Capaian Pembelajaran"></v-text-field>
                                         <v-text-field v-model="formsEdit.pemahaman" label="Pemahaman"></v-text-field>
-                                        <textarea v-model="formsEdit.kegiatan_pembelajaran" cols="62" rows="10"
+                                        <v-textarea v-model="formsEdit.kegiatan_pembelajaran"
+                                            name="Kegiatan Pembelajaran" label="Kegiatan Pembelajaran"
+                                            bg-color="grey-lighten-2"></v-textarea>
+                                        <!-- <textarea v-model="formsEdit.kegiatan_pembelajaran" cols="62" rows="10"
                                             name="Kegiatan Pembelajaran" label="Kegiatan Pembelajaran"
                                             placeholder="Kegiatan Pembelajaran"
-                                            class="border-sm elevation-2 pa-3"></textarea>
+                                            class="border-sm elevation-2 pa-3"></textarea> -->
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -531,7 +536,7 @@ const save = async () => {
             tema: forms.value.tema,
             alokasi_waktu: forms.value.alokasi_waktu,
             kompetensi_awal: forms.value.kompetensi_awal,
-            profil_pancasila: forms.value.profil_pancasila.join(", ").toString(),
+            profil_pancasila: forms.value.profil_pancasila.join(". ").toString(),
             sarana_prasarana: forms.value.sarana_prasarana,
             model_pembelajaran: forms.value.model_pembelajaran,
             tujuan_bab: forms.value.tujuan_bab,
@@ -600,7 +605,7 @@ const editItem = async (id) => {
         const response = await axios.get(`http://localhost:3000/kurikulum/modul_pembelajaran/${id}`)
         const data = response.data
         // console.log(data)
-        const extractedData = data.profil_pancasila.split(", ")
+        const extractedData = data.profil_pancasila.split(". ")
         console.log(extractedData)
 
         formsEdit.value = {
@@ -633,7 +638,7 @@ const updateData = async () => {
             alokasi_waktu: formsEdit.value.alokasi_waktu,
             kompetensi_awal: formsEdit.value.kompetensi_awal,
             // profil_pancasila: formsEdit.value.profil_pancasila
-            profil_pancasila: formsEdit.value.profil_pancasila.join(", ").toString(),
+            profil_pancasila: formsEdit.value.profil_pancasila.join(". ").toString(),
             sarana_prasarana: formsEdit.value.sarana_prasarana,
             model_pembelajaran: formsEdit.value.model_pembelajaran,
             tujuan_bab: formsEdit.value.tujuan_bab,

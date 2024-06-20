@@ -10,8 +10,8 @@
                             <v-card-item>
                                 <v-card-title>{{ i.namaFase }}</v-card-title>
                                 <v-card-subtitle>SDN 138 Pekanbaru</v-card-subtitle>
-                                <v-img height="150px"
-                                    src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
+                                <!-- <v-img height="150px" src="../../src/assets/img/gambar1.jpg"></v-img> -->
+                                <v-img height="150px" :src="imageSrc"></v-img>
                                 <v-card-actions class="justify-end">
                                     <v-btn class="bg-success mt-5 rounded-xl"
                                         :to="`/fase/${i.idFase}/semester`">Pilih</v-btn>
@@ -29,6 +29,7 @@
 import axios from "axios";
 import MenuTitle from "../components/MenuTitle.vue"
 import { ref, onMounted, computed } from 'vue'
+import imageSrc from '@/assets/img/gambar1.jpg';
 
 const fase = ref([])
 
