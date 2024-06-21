@@ -6,6 +6,11 @@
             <template v-slot:item.no="{ index }">
                 {{ index + 1 }} </template>
 
+            <template v-slot:item.tujuan_pembelajaran="{ item }">
+                <span class="d-inline-block text-truncate text-left" style="max-width: 600px;">{{
+            item.tujuan_pembelajaran }}
+                </span> </template>
+
             <template v-slot:top>
                 <v-toolbar flat>
                     <v-toolbar-title>Data Tujuan Pembelajaran</v-toolbar-title>
@@ -63,7 +68,7 @@
                     <v-dialog v-model="dialogEdit" max-width="650px">
                         <v-card class="py-3 px-2">
                             <v-card-title>
-                                <span class="text-h5">Edit Data Capaian Pembelajaran</span>
+                                <span class="text-h5">Edit Data Tujuan Pembelajaran</span>
                             </v-card-title>
 
                             <v-card-text>
@@ -105,10 +110,70 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+
+                    <!-- modal show -->
+                    <v-dialog v-model="dialogShow" max-width="900px">
+                        <v-card class="py-3 px-2">
+                            <v-card-title>
+                                <span class="text-h5">Detail Tujuan Pembelajaran</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container class="py-4">
+                                    <v-row align="start" class="ms-2">
+                                        <!-- Elemen Capaian Pembelajaran -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Elemen Capaian Pembelajaran
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                {{ dataShow.elemen_capaian }}
+                                            </v-sheet>
+                                        </v-col>
+
+                                        <!--  tujuan pembelajaran -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Tujuan Pembelajaran
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                <div class="text-justify"
+                                                    v-html="formattedText(dataShow.tujuan_pembelajaran)"></div>
+                                            </v-sheet>
+                                        </v-col>
+
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="error" variant="text" @click="closeShow" elevation="4">
+                                    Tutup
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-toolbar>
             </template>
 
             <template v-slot:item.actions="{ item }">
+                <v-btn density="comfortable" icon="mdi mdi-eye-outline" color="cyan-accent-4" class="mx-2"
+                    @click="showItem(item.idTp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
                     @click="editItem(item.idTp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
@@ -125,6 +190,7 @@ import axios from "axios";
 import { useRoute } from 'vue-router';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import { formattedText } from '../../helper/index';
 
 const route = useRoute()
 const idMp = route.params.idMp
@@ -133,10 +199,6 @@ const namaMp = ref("")
 const tujuan_pembelajaran = ref([])
 const capaian_pembelajaran = ref([])
 const elemenList = ref([]);
-
-function formattedText(text) {
-    return text.replace(/\n/g, "<br>");
-}
 
 const forms = ref({
     elemen_capaian: "",
@@ -149,6 +211,14 @@ const formsEdit = ref({
     tujuan_pembelajaran: "",
 })
 
+const dataShow = ref({
+    idTp: "",
+    elemen_capaian: "",
+    tujuan_pembelajaran: "",
+})
+
+
+
 const headers = ref([
     {
         title: 'No',
@@ -159,13 +229,13 @@ const headers = ref([
     },
     {
         title: 'Elemen Capaian Pembelajaran',
-        align: 'start',
+        align: 'center',
         sortable: false,
         key: 'elemen_capaian',
     },
     {
         title: 'Tujuan Pembelajaran',
-        align: 'start',
+        align: 'center',
         sortable: false,
         key: 'tujuan_pembelajaran',
     },
@@ -183,6 +253,7 @@ const deleteId = ref('');
 const dialogDelete = ref(false)
 const dialog = ref(false)
 const dialogEdit = ref(false)
+const dialogShow = ref(false)
 
 function close() {
     dialog.value = false
@@ -194,6 +265,10 @@ function closeDelete() {
 
 function closeEdit() {
     dialogEdit.value = false
+}
+
+function closeShow() {
+    dialogShow.value = false;
 }
 
 // get data capaian from capaian_pembelajaran
@@ -357,6 +432,20 @@ const getMatapelajaran = async () => {
     }
 }
 
+const showItem = async (id) => {
+    dialogShow.value = true;
+    try {
+        const response = await axios.get(`http://localhost:3000/kurikulum/tujuan_pembelajaran/${id}`)
+        const data = response.data
+        dataShow.value = {
+            idTp: data.idTp,
+            elemen_capaian: data.elemen_capaian,
+            tujuan_pembelajaran: data.tujuan_pembelajaran,
+        }
+    } catch (error) {
+        console.error("Error get data", error)
+    }
+}
 
 onMounted(() => {
     getMatapelajaran()

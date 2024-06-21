@@ -141,7 +141,7 @@
                     </v-dialog>
 
                     <!-- modal show -->
-                    <v-dialog v-model="dialogShow" max-width="1000px">
+                    <v-dialog v-model="dialogShow" max-width="1200px">
                         <v-card>
                             <v-card-item>
                                 <v-card-title>

@@ -7,7 +7,8 @@
                 {{ index + 1 }} </template>
 
             <template v-slot:item.capaian_pembelajaran="{ item }">
-                <p class="text-justify my-2 me-2" style="max-width: 750px;">{{ item.capaian_pembelajaran }}</p>
+                <p class="text-justify my-2 me-2 d-inline-block text-truncate" style="max-width: 650px;">{{
+            item.capaian_pembelajaran }}</p>
             </template>
 
             <template v-slot:item.elemen="{ item }">
@@ -109,10 +110,74 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+
+                    <!-- modal show -->
+                    <v-dialog v-model="dialogShow" max-width="800px">
+                        <v-card class="py-3 px-2">
+                            <v-card-title>
+                                <span class="text-h5">Detail Data Capaian Pembelajaran</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container class="py-4">
+                                    <v-container class="py-4">
+                                        <v-row align="start" class="ms-2">
+                                            <!-- Elemen -->
+                                            <v-col cols="3">
+                                                <v-sheet>
+                                                    Elemen
+                                                </v-sheet>
+                                            </v-col>
+                                            <v-col cols="1">
+                                                <v-sheet class="pa-1 ">
+                                                    :
+                                                </v-sheet>
+                                            </v-col>
+                                            <v-col cols="8">
+                                                <v-sheet class="pa-1 text-justify">
+                                                    {{ dataShow.elemen }}
+                                                </v-sheet>
+                                            </v-col>
+
+                                            <!-- Capaian Pembelajaran -->
+                                            <v-col cols="3">
+                                                <v-sheet>
+                                                    Capaian Pembelajaran
+                                                </v-sheet>
+                                            </v-col>
+                                            <v-col cols="1">
+                                                <v-sheet class="pa-1 ">
+                                                    :
+                                                </v-sheet>
+                                            </v-col>
+                                            <v-col cols="8">
+                                                <v-sheet class="pa-1 text-justify">
+                                                    <div class="text-justify"
+                                                        v-html="formattedText(dataShow.capaian_pembelajaran)">
+                                                    </div>
+                                                </v-sheet>
+                                            </v-col>
+
+                                        </v-row>
+                                    </v-container>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="error" prepend-icon="mdi mdi-minus-circle-outline" variant="text"
+                                    @click="closeShow" elevation="4">
+                                    Tutup
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-toolbar>
             </template>
 
             <template v-slot:item.actions="{ item }">
+                <v-btn density="comfortable" icon="mdi mdi-eye-outline" color="cyan-accent-4" class="mx-2"
+                    @click="showItem(item.idCp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
                     @click="editItem(item.idCp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
@@ -129,6 +194,7 @@ import axios from "axios";
 import { useRoute } from 'vue-router';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import { formattedText } from '../../helper/index';
 
 const route = useRoute()
 const idMp = route.params.idMp
@@ -143,6 +209,11 @@ const forms = ref({
 
 const formsEdit = ref({
     idCp: "",
+    elemen: "",
+    capaian_pembelajaran: "",
+})
+
+const dataShow = ref({
     elemen: "",
     capaian_pembelajaran: "",
 })
@@ -182,6 +253,7 @@ const deleteId = ref('');
 const dialogDelete = ref(false)
 const dialog = ref(false)
 const dialogEdit = ref(false)
+const dialogShow = ref(false)
 
 function close() {
     dialog.value = false
@@ -195,6 +267,10 @@ function closeEdit() {
     dialogEdit.value = false
 }
 
+function closeShow() {
+    dialogShow.value = false;
+}
+
 // get data
 const loadData = async () => {
     // console.log(idMp)
@@ -202,7 +278,7 @@ const loadData = async () => {
         const response = await axios.get(`http://localhost:3000/kurikulum/${idMp}/capaian_pembelajaran`)
         const data = response.data
         capaian_pembelajaran.value = data
-        // console.log(capaian_pembelajaran)
+        console.log(capaian_pembelajaran)
     } catch (error) {
         console.error("Error get data", error)
     }
@@ -337,6 +413,20 @@ const getMatapelajaran = async () => {
         namaMp.value = data.namaMataPelajaran
         // console.log(namaMp.value)
         return data
+    } catch (error) {
+        console.error("Error get data", error)
+    }
+}
+
+const showItem = async (id) => {
+    dialogShow.value = true;
+    try {
+        const response = await axios.get(`http://localhost:3000/kurikulum/capaian_pembelajaran/${id}`)
+        const data = response.data
+        dataShow.value = {
+            elemen: data.elemen,
+            capaian_pembelajaran: data.capaian_pembelajaran,
+        }
     } catch (error) {
         console.error("Error get data", error)
     }

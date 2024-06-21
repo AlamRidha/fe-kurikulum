@@ -5,6 +5,10 @@
         <v-data-table :headers="headers" :items="alur_tujuan_pembelajaran" :items-per-page="5" class="elevation-5 mt-4">
             <template v-slot:item.no="{ index }">
                 {{ index + 1 }} </template>
+            <template v-slot:item.alur_tujuan_pembelajaran="{ item }">
+                <span class="d-inline-block text-truncate text-left" style="max-width: 600px;">{{
+            item.alur_tujuan_pembelajaran }}
+                </span> </template>
 
             <template v-slot:top>
                 <v-toolbar flat>
@@ -58,7 +62,7 @@
                     <v-dialog v-model="dialogEdit" max-width="650px">
                         <v-card class="py-3 px-2">
                             <v-card-title>
-                                <span class="text-h5">Edit Data Capaian Pembelajaran</span>
+                                <span class="text-h5">Edit Data Alur Tujuan Pembelajaran</span>
                             </v-card-title>
 
                             <v-card-text>
@@ -98,10 +102,71 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+
+                    <!-- modal show -->
+                    <v-dialog v-model="dialogShow" max-width="900px">
+                        <v-card class="py-3 px-2">
+                            <v-card-title>
+                                <span class="text-h5">Detail Data Alur Tujuan Pembelajaran</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container class="py-4">
+                                    <v-row align="start" class="ms-2">
+                                        <!-- Tahap -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Tahap
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                {{ dataShow.tahap }}
+                                            </v-sheet>
+                                        </v-col>
+
+                                        <!-- alur tujuan pembelajaran -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Alur Tujuan Pembelajaran
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                <div class="text-justify"
+                                                    v-html="formattedText(dataShow.alur_tujuan_pembelajaran)"></div>
+                                            </v-sheet>
+                                        </v-col>
+
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="error" prepend-icon="mdi mdi-minus-circle-outline" variant="text"
+                                    @click="closeShow" elevation="4">
+                                    Tutup
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-toolbar>
             </template>
 
             <template v-slot:item.actions="{ item }">
+                <v-btn density="comfortable" icon="mdi mdi-eye-outline" color="cyan-accent-4" class="mx-2"
+                    @click="showItem(item.idAtp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
                     @click="editItem(item.idAtp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
@@ -119,6 +184,7 @@ import axios from "axios";
 import { useRoute } from 'vue-router';
 import { jsPDF } from 'jspdf';
 import 'jspdf-autotable';
+import { formattedText } from '../../helper/index';
 
 const route = useRoute()
 const idMp = route.params.idMp
@@ -136,6 +202,12 @@ const formsEdit = ref({
     alur_tujuan_pembelajaran: "",
 })
 
+const dataShow = ref({
+    idAtp: "",
+    tahap: "",
+    alur_tujuan_pembelajaran: "",
+})
+
 const headers = ref([
     {
         title: 'No',
@@ -146,13 +218,13 @@ const headers = ref([
     },
     {
         title: 'Tahap',
-        align: 'start',
+        align: 'center',
         sortable: false,
         key: 'tahap',
     },
     {
         title: 'Alur Tujuan Pembelajaran',
-        align: 'start',
+        align: 'center',
         sortable: false,
         key: 'alur_tujuan_pembelajaran',
     },
@@ -170,6 +242,7 @@ const deleteId = ref('');
 const dialogDelete = ref(false)
 const dialog = ref(false)
 const dialogEdit = ref(false)
+const dialogShow = ref(false)
 
 function close() {
     dialog.value = false
@@ -181,6 +254,10 @@ function closeDelete() {
 
 function closeEdit() {
     dialogEdit.value = false
+}
+
+function closeShow() {
+    dialogShow.value = false;
 }
 
 // get data alur tujuan pembelajaran
@@ -326,6 +403,23 @@ const getMatapelajaran = async () => {
         namaMp.value = data.namaMataPelajaran
         // console.log(namaMp.value)
         return data
+    } catch (error) {
+        console.error("Error get data", error)
+    }
+}
+
+const showItem = async (id) => {
+    dialogShow.value = true;
+    // console.log(id)
+
+    try {
+        const response = await axios.get(`http://localhost:3000/kurikulum/alur_tujuan_pembelajaran/${id}`)
+        const data = response.data
+        // console.log(data)
+        dataShow.value = {
+            tahap: data.tahap,
+            alur_tujuan_pembelajaran: data.alur_tujuan_pembelajaran,
+        }
     } catch (error) {
         console.error("Error get data", error)
     }
