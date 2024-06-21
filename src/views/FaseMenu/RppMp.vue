@@ -1,6 +1,6 @@
 <template>
     <v-container fluid>
-        <MenuTitle msg="Menu | Fase | Semester | Kurikulum" class="text-subtitle-1 font-weight-medium" />
+        <MenuTitle msg="Menu | Fase | Kelas |Semester | Kurikulum" class="text-subtitle-1 font-weight-medium" />
         <v-row class="mt-2">
             <v-col cols="12" sm="4">
                 <v-card class="mx-auto rounded-lg" width="350" height="250" elevation="8">
@@ -10,7 +10,7 @@
                             src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
                         <v-card-actions class="justify-end">
                             <v-btn class="bg-success rounded-xl"
-                                :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/capaian-pembelajaran`">Masuk</v-btn>
+                                :to="`/fase/${$route.params.idFase}/kelas/${$route.params.idKelas}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/capaian-pembelajaran`">Masuk</v-btn>
                         </v-card-actions>
                     </v-card-item>
                 </v-card>
@@ -24,7 +24,7 @@
                             src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
                         <v-card-actions class="justify-end">
                             <v-btn class="bg-success rounded-xl"
-                                :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/tujuan-pembelajaran`">Masuk</v-btn>
+                                :to="`/fase/${$route.params.idFase}/kelas/${$route.params.idKelas}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/tujuan-pembelajaran`">Masuk</v-btn>
                         </v-card-actions>
                     </v-card-item>
                 </v-card>
@@ -38,7 +38,7 @@
                             src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
                         <v-card-actions class="justify-end">
                             <v-btn class="bg-success rounded-xl"
-                                :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/alur_tujuan-pembelajaran`">Masuk</v-btn>
+                                :to="`/fase/${$route.params.idFase}/kelas/${$route.params.idKelas}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/alur_tujuan-pembelajaran`">Masuk</v-btn>
                         </v-card-actions>
                     </v-card-item>
                 </v-card>
@@ -52,7 +52,7 @@
                             src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
                         <v-card-actions class="justify-end">
                             <v-btn class="bg-success rounded-xl"
-                                :to="`/fase/${$route.params.idFase}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/model-pembelajaran`">Masuk</v-btn>
+                                :to="`/fase/${$route.params.idFase}/kelas/${$route.params.idKelas}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/model-pembelajaran`">Masuk</v-btn>
                         </v-card-actions>
                     </v-card-item>
                 </v-card>

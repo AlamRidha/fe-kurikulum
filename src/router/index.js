@@ -4,6 +4,7 @@ import FaseView from "../views/FaseView.vue";
 import AdministrasiGuruView from "../views/AdministrasiGuruView.vue";
 import ListGuruView from "../views/ListGuruView.vue";
 import ProfilPelajarPancasilaView from "../views/ProfilPelajar.vue";
+import KelasView from "../views/FaseMenu/Kelas.vue";
 import EvaluasiView from "../views/Evaluasi.vue";
 import SemesterView from "../views/FaseMenu/Semester.vue";
 import MataPelajaranView from "../views/FaseMenu/FaseMataPelajaran.vue";
@@ -33,37 +34,42 @@ const router = createRouter({
           component: FaseView,
         },
         {
-          path: "fase/:idFase/semester",
+          path: "fase/:idFase/kelas",
+          name: "Kelas",
+          component: KelasView,
+        },
+        {
+          path: "fase/:idFase/kelas/:idKelas/semester",
           name: "First Face",
           component: SemesterView,
         },
         {
-          path: "fase/:idFase/semester/:idSemester/mata-pelajaran",
+          path: "fase/:idFase/kelas/:idKelas/semester/:idSemester/mata-pelajaran",
           name: "Mapel",
           component: MataPelajaranView,
         },
         {
-          path: "fase/:idFase/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp",
+          path: "fase/:idFase/kelas/:idKelas/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp",
           name: "RppMp",
           component: RppMpView,
         },
         {
-          path: "fase/:idFase/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/capaian-pembelajaran",
+          path: "fase/:idFase/kelas/:idKelas/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/capaian-pembelajaran",
           name: "Capaian Pembelajaran",
           component: CapaianPembelajaranView,
         },
         {
-          path: "fase/:idFase/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/tujuan-pembelajaran",
+          path: "fase/:idFase/kelas/:idKelas/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/tujuan-pembelajaran",
           name: "Tujuan Pembelajaran",
           component: TujuanPembelajaranView,
         },
         {
-          path: "fase/:idFase/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/alur_tujuan-pembelajaran",
+          path: "fase/:idFase/kelas/:idKelas/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/alur_tujuan-pembelajaran",
           name: "Alur Tujuan Pembelajaran",
           component: AlurTujuanPembelajaranView,
         },
         {
-          path: "fase/:idFase/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/model-pembelajaran",
+          path: "fase/:idFase/kelas/:idKelas/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/model-pembelajaran",
           name: "Model Pembelajaran",
           component: ModelPembelajaranView,
         },

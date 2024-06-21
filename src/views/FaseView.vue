@@ -14,7 +14,7 @@
                                 <v-img height="150px" :src="imageSrc"></v-img>
                                 <v-card-actions class="justify-end">
                                     <v-btn class="bg-success mt-5 rounded-xl"
-                                        :to="`/fase/${i.idFase}/semester`">Pilih</v-btn>
+                                        :to="`/fase/${i.idFase}/kelas`">Pilih</v-btn>
                                 </v-card-actions>
                             </v-card-item>
                         </v-card>
