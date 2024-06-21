@@ -4,6 +4,7 @@ import FaseView from "../views/FaseView.vue";
 import AdministrasiGuruView from "../views/AdministrasiGuruView.vue";
 import ListGuruView from "../views/ListGuruView.vue";
 import ProfilPelajarPancasilaView from "../views/ProfilPelajar.vue";
+import EvaluasiView from "../views/Evaluasi.vue";
 import SemesterView from "../views/FaseMenu/Semester.vue";
 import MataPelajaranView from "../views/FaseMenu/FaseMataPelajaran.vue";
 import CapaianPembelajaranView from "../views/FaseMenu/CapaianPembelajaran.vue";
@@ -70,6 +71,11 @@ const router = createRouter({
           path: "/datalistguru",
           name: "Data List Guru",
           component: ListGuruView,
+        },
+        {
+          path: "/evaluasi",
+          name: "Evaluasi",
+          component: EvaluasiView,
         },
         {
           path: "/profilpelajarpancasila",

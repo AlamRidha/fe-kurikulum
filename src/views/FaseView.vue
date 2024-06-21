@@ -28,7 +28,7 @@
 <script setup>
 import axios from "axios";
 import MenuTitle from "../components/MenuTitle.vue"
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted } from 'vue'
 import imageSrc from '@/assets/img/gambar1.jpg';
 
 const fase = ref([])

@@ -32,6 +32,11 @@
                     <v-icon icon="mdi mdi-bag-personal" />
                 </template>
             </v-list-item>
+            <v-list-item to="/evaluasi" title="Evaluasi" class="my-8">
+                <template v-slot:prepend>
+                    <v-icon icon="mdi mdi-marker" />
+                </template>
+            </v-list-item>
             <v-list-item title="Logout" class="my-8" @click="logout">
                 <template v-slot:prepend>
                     <v-icon icon="mdi mdi-logout" />
