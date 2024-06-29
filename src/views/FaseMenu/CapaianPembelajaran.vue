@@ -45,9 +45,8 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="forms.elemen" label="Elemen"></v-text-field>
-                                        <v-textarea v-model="forms.capaian_pembelajaran" cols="65" rows="10"
-                                            class="rounded-xl" bg-color="grey-lighten-2"
-                                            label="Capaian Pembelajaran"></v-textarea>
+                                        <v-textarea v-model="forms.capaian_pembelajaran" class="rounded-xl"
+                                            bg-color="grey-lighten-2" label="Capaian Pembelajaran"></v-textarea>
                                     </v-form>
                                 </v-container>
                             </v-card-text>

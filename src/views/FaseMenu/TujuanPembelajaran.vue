@@ -3,8 +3,20 @@
         <MenuTitle msg="Menu | Kurikulum Tujuan Pembelajaran" class="text-subtitle-1 font-weight-medium " />
 
         <v-data-table :headers="headers" :items="tujuan_pembelajaran" :items-per-page="5" class="elevation-5 mt-4">
-            <template v-slot:item.no="{ index }">
-                {{ index + 1 }} </template>
+            <!-- <template v-slot:item.no="{ index }">
+                {{ index + 1 }} </template> -->
+
+            <template v-slot:item.elemen_capaian="{ item }">
+                <template v-if="!item.isMerged">
+                    <span class="font-weight-bold">{{ item.elemen_capaian }}</span>
+                </template>
+                <template v-else>
+                    <template v-if="item.rowspan > 1">
+                        <span :rowspan="item.rowspan">{{ item.elemen_capaian }}</span>
+                    </template>
+                </template>
+            </template>
+
 
             <template v-slot:item.tujuan_pembelajaran="{ item }">
                 <span class="d-inline-block text-truncate text-left" style="max-width: 600px;">{{
@@ -41,10 +53,9 @@
                                     <v-form ref="form">
                                         <v-select v-model="forms.elemen_capaian" :items="elemenList"
                                             label="Elemen Capaian Pembelajaran"></v-select>
-                                        <textarea name="tujuan_pembelajaran" cols="65" rows="10"
-                                            v-model="forms.tujuan_pembelajaran" label="Tujuan Pembelajaran"
-                                            placeholder="Tujuan Pembelajaran"
-                                            class="border-sm elevation-2 pa-2"></textarea>
+                                        <v-textarea name="tujuan_pembelajaran" v-model="forms.tujuan_pembelajaran"
+                                            label="Tujuan Pembelajaran" class="rounded-xl"
+                                            bg-color="grey-lighten-2"></v-textarea>
                                         <!-- <v-text-field v-model="forms.tujuan_pembelajaran"
                                             label="Tujuan Pembelajaran"></v-text-field> -->
 
@@ -76,10 +87,9 @@
                                     <v-form ref="form">
                                         <v-select v-model="formsEdit.elemen_capaian" :items="elemenList"
                                             label="Elemen Capaian Pembelajaran"></v-select>
-                                        <textarea name="tujuan_pembelajaran" cols="65" rows="10"
-                                            v-model="formsEdit.tujuan_pembelajaran" label="Tujuan Pembelajaran"
-                                            placeholder="Tujuan Pembelajaran"
-                                            class="border-sm elevation-2 pa-2"></textarea>
+                                        <v-textarea name="tujuan_pembelajaran" v-model="formsEdit.tujuan_pembelajaran"
+                                            label="Tujuan Pembelajaran" class="rounded-xl"
+                                            bg-color="grey-lighten-2"></v-textarea>
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -181,12 +191,17 @@
             </template>
 
         </v-data-table>
+
+        <!-- snackbar -->
+        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
+            <p class="text-center">{{ textSnackbar }}</p>
+        </v-snackbar>
     </v-container>
 </template>
 
 <script setup>
 import MenuTitle from '../../components/MenuTitle.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from "axios";
 import { useRoute } from 'vue-router';
 import { jsPDF } from 'jspdf';
@@ -200,6 +215,11 @@ const namaMp = ref("")
 const tujuan_pembelajaran = ref([])
 const capaian_pembelajaran = ref([])
 const elemenList = ref([]);
+
+
+const snackbar = ref(false);
+const textSnackbar = ref("");
+const timeout = ref(2000);
 
 const forms = ref({
     elemen_capaian: "",
@@ -219,15 +239,14 @@ const dataShow = ref({
 })
 
 
-
 const headers = ref([
-    {
-        title: 'No',
-        align: 'center',
-        sortable: false,
-        key: 'no',
-        value: 'id',
-    },
+    // {
+    //     title: 'No',
+    //     align: 'center',
+    //     sortable: false,
+    //     key: 'no',
+    //     value: 'id',
+    // },
     {
         title: 'Elemen Capaian Pembelajaran',
         align: 'center',
@@ -272,13 +291,7 @@ function closeShow() {
     dialogShow.value = false;
 }
 
-// rowspan kolom
-const getRowspan = (item) => tujuan_pembelajaran.value.filter((tp) => tp.elemen_capaian === item.elemen_capaian).length;
 
-const shouldShowRowspanCell = (item, index) => {
-    const prevItem = tujuan_pembelajaran.value[index - 1];
-    return !prevItem || prevItem.elemen_capaian !== item.elemen_capaian;
-};
 
 // get data capaian from capaian_pembelajaran
 const getCapaian = async () => {
@@ -293,14 +306,55 @@ const getCapaian = async () => {
     }
 }
 
-
 // get data 
 const loadData = async () => {
     try {
         const response = await axios.get(`http://localhost:3000/kurikulum/${idMp}/tujuan_pembelajaran`)
         const data = response.data
-        tujuan_pembelajaran.value = data
+        // tujuan_pembelajaran.value = data
         // console.log("Data tujuan pembelajaran", data)
+
+        // Buat objek untuk menampung data yang sudah di-grupkan
+        let groupedData = {};
+        // Grupkan data berdasarkan elemen_capaian
+        data.forEach(item => {
+            if (!groupedData[item.elemen_capaian]) {
+                groupedData[item.elemen_capaian] = [];
+            }
+            groupedData[item.elemen_capaian].push(item);
+        });
+
+        // Inisialisasi hasil akhir yang akan digunakan di tabel
+        let result = [];
+
+        // Iterasi melalui objek yang sudah di-grupkan
+        for (const elemenCapaian in groupedData) {
+            if (groupedData.hasOwnProperty(elemenCapaian)) {
+                const group = groupedData[elemenCapaian];
+
+                // Tentukan jumlah baris (rowspan) untuk setiap grup
+                const rowspan = group.length;
+
+                // Iterasi untuk menambahkan data ke result dengan properti rowspan dan isMerged
+                group.forEach((item, index) => {
+                    if (index === 0) {
+                        result.push({
+                            ...item,
+                            rowspan: rowspan,  // Menambahkan rowspan ke elemen pertama dari grup
+                            isMerged: false,   // Menandai elemen pertama dari grup sebagai tidak digabungkan
+                        });
+                    } else {
+                        result.push({
+                            ...item,
+                            isMerged: true,  // Menandai elemen lain dari grup sebagai digabungkan
+                            nomor: null
+                        });
+                    }
+                });
+            }
+        }
+        tujuan_pembelajaran.value = result
+        // console.log(groupedData)
     } catch (error) {
         console.error("Error get data ", error)
     }
@@ -320,6 +374,8 @@ const save = async () => {
             forms.value.tujuan_pembelajaran = ""
             dialog.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Disimpan";
+            snackbar.value = true;
         } else {
             console.log("Response error ", response.data)
         }
@@ -344,6 +400,8 @@ const deleteItemConfirm = async () => {
             console.log("Data deleted successfully:", response.data);
             loadData(); // Reload data after deletion
             dialogDelete.value = false;
+            textSnackbar.value = "Data Berhasil Dihapu";
+            snackbar.value = true;
         } else {
             console.error("Error response data:", response.data);
         }
@@ -383,6 +441,8 @@ const updateData = async () => {
             console.log("Data updated successfully:", response.data);
             loadData(); // Reload data after update
             dialogEdit.value = false;
+            textSnackbar.value = "Data Berhasil Diperbarui";
+            snackbar.value = true;
         } else {
             console.error("Error response data:", response.data);
         }
@@ -412,9 +472,39 @@ const downloadPDF = () => {
     doc.text(sekolah, 60, 35);
 
     // data tabel
-    const data = tujuan_pembelajaran.value.map((item, index) =>
-        [index + 1, item.elemen_capaian, item.tujuan_pembelajaran]
-    )
+    // const data = tujuan_pembelajaran.value.map((item, index) =>
+    //     [index + 1, item.elemen_capaian, item.tujuan_pembelajaran]
+    // )
+    // Grupkan data berdasarkan elemen capaian
+    let groupedData = {};
+    tujuan_pembelajaran.value.forEach(item => {
+        if (!groupedData[item.elemen_capaian]) {
+            groupedData[item.elemen_capaian] = [];
+        }
+        groupedData[item.elemen_capaian].push(item);
+    });
+
+    // Buat data tabel dengan elemen capaian yang digabungkan
+    let data = [];
+    let index = 1;
+    let firstRow = true;
+
+    for (const elemenCapaian in groupedData) {
+        if (groupedData.hasOwnProperty(elemenCapaian)) {
+            const group = groupedData[elemenCapaian];
+            firstRow = true;
+
+            group.forEach((item, i) => {
+                if (firstRow) {
+                    data.push([index, item.elemen_capaian, item.tujuan_pembelajaran]);
+                    firstRow = false;
+                    index++;
+                } else {
+                    data.push(['', '', item.tujuan_pembelajaran]);
+                }
+            });
+        }
+    }
 
     // masukkan data tabel kedalam dokumen pdf
     doc.autoTable({
@@ -422,7 +512,13 @@ const downloadPDF = () => {
         body: data,
         startY: 45,
         styles: { fontSize: 8 },
-        headStyles: { fillColor: [22, 160, 133], halign: 'center' }
+        headStyles: { fillColor: [22, 160, 133], halign: 'center' },
+        bodyStyles: { valign: 'top' },
+        columnStyles: {
+            0: { halign: 'center' },
+            1: { halign: 'left', cellWidth: 40 },
+            2: { halign: 'left', cellWidth: 'auto' }
+        }
     });
 
     // Menyimpan dokumen PDF
