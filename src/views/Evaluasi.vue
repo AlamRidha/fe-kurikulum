@@ -40,15 +40,17 @@
                             <v-card-text>
                                 <v-container class="py-4">
                                     <v-form ref="form">
-                                        <!-- <v-text-field v-model="forms.namaFase" label="Nama Fase"></v-text-field> -->
+                                        <!-- <v-text-field v-model="forms.namaKelas" label="Nama Fase"></v-text-field> -->
                                         <!-- <v-text-field v-model="forms.semester" label="Semester"></v-text-field> -->
-                                        <v-select v-model="forms.namaFase" :items="itemFase"
-                                            label="Nama Fase"></v-select>
+                                        <v-select v-model="forms.namaKelas" :items="itemKelas"
+                                            label="Nama Kelas"></v-select>
                                         <v-select v-model="forms.semester" :items="itemSemester"
                                             label="Semester"></v-select>
+                                        <v-select v-model="forms.mata_pelajaran" :items="itemMataPelajaran"
+                                            label="Nama Mata Pelajaran"></v-select>
 
-                                        <v-text-field v-model="forms.mata_pelajaran"
-                                            label="Nama Mata Pelajaran"></v-text-field>
+                                        <!-- <v-text-field v-model="forms.mata_pelajaran"
+                                            label="Nama Mata Pelajaran"></v-text-field> -->
                                         <v-text-field v-model="forms.jenis_evaluasi"
                                             label="Jenis Evaluasi"></v-text-field>
                                         <!-- <v-text-field v-model="forms.status_evaluasi"
@@ -83,14 +85,16 @@
                             <v-card-text>
                                 <v-container class="py-4">
                                     <v-form ref="form">
-                                        <!-- <v-text-field v-model="formsEdit.namaFase" label="Nama Fase"></v-text-field>
+                                        <!-- <v-text-field v-model="formsEdit.namaKelas" label="Nama Fase"></v-text-field>
                                         <v-text-field v-model="formsEdit.semester" label="Semester"></v-text-field> -->
-                                        <v-select v-model="formsEdit.namaFase" :items="itemFase"
-                                            label="Nama Fase"></v-select>
+                                        <v-select v-model="formsEdit.namaKelas" :items="itemKelas"
+                                            label="Nama Kelas"></v-select>
                                         <v-select v-model="formsEdit.semester" :items="itemSemester"
                                             label="Semester"></v-select>
-                                        <v-text-field v-model="formsEdit.mata_pelajaran"
-                                            label="Nama Mata Pelajaran"></v-text-field>
+                                        <!-- <v-text-field v-model="formsEdit.mata_pelajaran"
+                                            label="Nama Mata Pelajaran"></v-text-field> -->
+                                        <v-select v-model="formsEdit.mata_pelajaran" :items="itemMataPelajaran"
+                                            label="Nama Mata Pelajaran"></v-select>
                                         <v-text-field v-model="formsEdit.jenis_evaluasi"
                                             label="Jenis Evaluasi"></v-text-field>
                                         <!-- <v-text-field v-model="formsEdit.status_evaluasi"
@@ -130,10 +134,120 @@
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
+
+                    <v-dialog v-model="dialogShow" max-width="900px">
+                        <v-card class="py-3 px-2">
+                            <v-card-title>
+                                <span class="text-h5">Detail Evaluasi Pembelajaran</span>
+                            </v-card-title>
+
+                            <v-card-text>
+                                <v-container class="py-4">
+                                    <v-row align="start" class="ms-2">
+                                        <!-- Nama Kelas -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Nama Kelas
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                {{ dataShow.namaKelas }}
+                                            </v-sheet>
+                                        </v-col>
+
+                                        <!--  Semester -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Semester
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                {{ dataShow.semester }}
+                                            </v-sheet>
+                                        </v-col>
+
+                                        <!-- Mata Pelajaran -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Mata Pelajaran
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                {{ dataShow.mata_pelajaran }}
+                                            </v-sheet>
+                                        </v-col>
+
+                                        <!-- Jenis Evaluasi -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Jenis Evaluasi
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                {{ dataShow.jenis_evaluasi }}
+                                            </v-sheet>
+                                        </v-col>
+
+                                        <!-- Masalah Evaluasi -->
+                                        <v-col cols="3">
+                                            <v-sheet>
+                                                Masalah Evaluasi
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="1">
+                                            <v-sheet class="pa-1 ">
+                                                :
+                                            </v-sheet>
+                                        </v-col>
+                                        <v-col cols="8">
+                                            <v-sheet class="pa-1 text-justify">
+                                                <div class="text-justify"
+                                                    v-html="formattedText(dataShow.masalah_evaluasi)"></div>
+                                            </v-sheet>
+                                        </v-col>
+
+                                    </v-row>
+                                </v-container>
+                            </v-card-text>
+
+                            <v-card-actions>
+                                <v-spacer></v-spacer>
+                                <v-btn color="error" variant="text" @click="closeShow" elevation="4">
+                                    Tutup
+                                </v-btn>
+                            </v-card-actions>
+                        </v-card>
+                    </v-dialog>
                 </v-toolbar>
             </template>
 
             <template v-slot:item.actions="{ item }">
+                <v-btn density="comfortable" icon="mdi mdi-eye-outline" color="cyan-accent-4" class="mx-2"
+                    @click="showItem(item.idEval)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
                     @click="editItem(item.idEval)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
@@ -147,7 +261,7 @@
 import MenuTitle from "../components/MenuTitle.vue"
 import { ref, onMounted } from "vue"
 import axios from "axios";
-import { formattedDate } from "../helper/index"
+import { formattedDate, formattedText } from "../helper/index"
 
 const data_evaluasi = ref([])
 const deleteId = ref('');
@@ -156,14 +270,17 @@ const deleteId = ref('');
 const dialogDelete = ref(false)
 const dialog = ref(false)
 const dialogEdit = ref(false)
+const dialogShow = ref(false)
 
-const itemFase = ref(['Fase A', 'Fase B', 'Fase C'])
+
+const itemKelas = ref(['Kelas 1', 'Kelas 2', 'Kelas 3', 'Kelas 4', 'Kelas 5', 'Kelas 6'])
 const itemSemester = ref(['Semester 1', 'Semester 2'])
 const itemStatus = ref(['Belum Terlaksana', 'Terlaksana'])
+const itemMataPelajaran = ref([])
 
 
 const forms = ref({
-    namaFase: "",
+    namaKelas: "",
     semester: "",
     mata_pelajaran: "",
     jenis_evaluasi: "",
@@ -173,7 +290,17 @@ const forms = ref({
 
 const formsEdit = ref({
     idEval: "",
-    namaFase: "",
+    namaKelas: "",
+    semester: "",
+    mata_pelajaran: "",
+    jenis_evaluasi: "",
+    masalah_evaluasi: "",
+    status_evaluasi: "",
+})
+
+const dataShow = ref({
+    idEval: "",
+    namaKelas: "",
     semester: "",
     mata_pelajaran: "",
     jenis_evaluasi: "",
@@ -191,10 +318,10 @@ const headers = ref([
         value: 'id',
     },
     {
-        title: 'Nama Fase',
+        title: 'Nama Kelas',
         align: 'center',
         sortable: false,
-        key: 'namaFase',
+        key: 'namaKelas',
     },
     {
         title: 'Semester',
@@ -234,6 +361,7 @@ const headers = ref([
     },
 ])
 
+
 function close() {
     dialog.value = false
 }
@@ -244,6 +372,9 @@ function closeDelete() {
 
 function closeEdit() {
     dialogEdit.value = false
+}
+function closeShow() {
+    dialogShow.value = false;
 }
 
 // get data
@@ -262,7 +393,7 @@ const save = async () => {
     try {
 
         const newData = {
-            namaFase: forms.value.namaFase,
+            namaKelas: forms.value.namaKelas,
             semester: forms.value.semester,
             mata_pelajaran: forms.value.mata_pelajaran,
             jenis_evaluasi: forms.value.jenis_evaluasi,
@@ -272,7 +403,7 @@ const save = async () => {
 
         const response = await axios.post("http://localhost:3000/evaluasi", newData)
         if (response.status === 201) {
-            forms.value.namaFase = ""
+            forms.value.namaKelas = ""
             forms.value.semester = ""
             forms.value.mata_pelajaran = ""
             forms.value.jenis_evaluasi = ""
@@ -320,7 +451,7 @@ const editItem = async (id) => {
         const data = response.data
         formsEdit.value = {
             idEval: data.idEval,
-            namaFase: data.namaFase,
+            namaKelas: data.namaKelas,
             semester: data.semester,
             mata_pelajaran: data.mata_pelajaran,
             jenis_evaluasi: data.jenis_evaluasi,
@@ -336,7 +467,7 @@ const editItem = async (id) => {
 const updateData = async () => {
     try {
         const updateData = {
-            namaFase: formsEdit.value.namaFase,
+            namaKelas: formsEdit.value.namaKelas,
             semester: formsEdit.value.semester,
             mata_pelajaran: formsEdit.value.mata_pelajaran,
             jenis_evaluasi: formsEdit.value.jenis_evaluasi,
@@ -358,8 +489,41 @@ const updateData = async () => {
     }
 }
 
+const showItem = async (id) => {
+    dialogShow.value = true;
+    try {
+        const response = await axios.get(`http://localhost:3000/evaluasi/${id}`)
+        const data = response.data
+        dataShow.value = {
+            idEval: data.idEval,
+            namaKelas: data.namaKelas,
+            semester: data.semester,
+            mata_pelajaran: data.mata_pelajaran,
+            jenis_evaluasi: data.jenis_evaluasi,
+            masalah_evaluasi: data.masalah_evaluasi,
+            status_evaluasi: data.status_evaluasi,
+        }
+    } catch (error) {
+        console.error("Error get data", error)
+    }
+}
+
+const getMataPelajaran = async () => {
+    try {
+        const response = await axios.get("http://localhost:3000/fase/semester/6/mp")
+        const data = response.data
+        const dataMp = data.map(item => item.namaMataPelajaran)
+        itemMataPelajaran.value = dataMp
+
+        // console.log("Data mata pelajaran : ", dataMp)
+    } catch (error) {
+        console.error("Error response data ", error)
+    }
+}
+
 onMounted(() => {
     loadData()
+    getMataPelajaran()
 })
 
 </script>
