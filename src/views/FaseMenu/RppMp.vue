@@ -57,6 +57,20 @@
                     </v-card-item>
                 </v-card>
             </v-col>
+
+            <v-col cols="12" sm="4">
+                <v-card class="mx-auto rounded-lg" width="350" height="250" elevation="8">
+                    <v-card-item>
+                        <v-card-title>Asesmen</v-card-title>
+                        <v-img height="150px"
+                            src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"></v-img>
+                        <v-card-actions class="justify-end">
+                            <v-btn class="bg-success rounded-xl"
+                                :to="`/fase/${$route.params.idFase}/kelas/${$route.params.idKelas}/semester/${$route.params.idSemester}/mata-pelajaran/${$route.params.idMp}/rpp-mp/asesmen`">Masuk</v-btn>
+                        </v-card-actions>
+                    </v-card-item>
+                </v-card>
+            </v-col>
         </v-row>
     </v-container>
 </template>
