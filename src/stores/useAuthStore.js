@@ -26,8 +26,13 @@ export const useAuthStore = defineStore("user", {
           Cookies.set("user", JSON.stringify(response.data));
           console.log("Login berhasil");
           router.push("/fase");
+          return { success: true, message: "Login berhasil" };
         } else {
           console.log("Login gagal tidak ada dalam database");
+          return {
+            success: false,
+            message: "Login gagal tidak ada dalam database",
+          };
         }
       } catch (error) {
         console.log("Login error ", error);

@@ -179,6 +179,7 @@
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
                     @click="deleteItem(item.idTp)"></v-btn>
             </template>
+
         </v-data-table>
     </v-container>
 </template>
@@ -270,6 +271,14 @@ function closeEdit() {
 function closeShow() {
     dialogShow.value = false;
 }
+
+// rowspan kolom
+const getRowspan = (item) => tujuan_pembelajaran.value.filter((tp) => tp.elemen_capaian === item.elemen_capaian).length;
+
+const shouldShowRowspanCell = (item, index) => {
+    const prevItem = tujuan_pembelajaran.value[index - 1];
+    return !prevItem || prevItem.elemen_capaian !== item.elemen_capaian;
+};
 
 // get data capaian from capaian_pembelajaran
 const getCapaian = async () => {

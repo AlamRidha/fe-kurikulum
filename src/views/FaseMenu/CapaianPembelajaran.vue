@@ -45,9 +45,9 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="forms.elemen" label="Elemen"></v-text-field>
-                                        <textarea v-model="forms.capaian_pembelajaran" cols="65" rows="10"
-                                            class="border-sm elevation-2 pa-2" label="Capaian Pembelajaran"
-                                            placeholder="Capaian Pembelajaran"></textarea>
+                                        <v-textarea v-model="forms.capaian_pembelajaran" cols="65" rows="10"
+                                            class="rounded-xl" bg-color="grey-lighten-2"
+                                            label="Capaian Pembelajaran"></v-textarea>
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -75,8 +75,9 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="formsEdit.elemen" label="Elemen"></v-text-field>
-                                        <textarea v-model="formsEdit.capaian_pembelajaran" cols="65" rows="10"
-                                            class="border-sm elevation-2 pa-2" label="Capaian Pembelajaran"></textarea>
+                                        <v-textarea v-model="formsEdit.capaian_pembelajaran" cols="65" rows="10"
+                                            class="rounded-xl" bg-color="grey-lighten-2"
+                                            label="Capaian Pembelajaran"></v-textarea>
                                         <!-- <v-text-field v-model="formsEdit.capaian_pembelajaran"
                                             label="Capaian Pembelajaran" :style="{ height: '500px' }"></v-text-field> -->
 
@@ -184,6 +185,11 @@
                     @click="deleteItem(item.idCp)"></v-btn>
             </template>
         </v-data-table>
+
+        <!-- snackbar -->
+        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
+            <p class="text-center">{{ textSnackbar }}</p>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -201,6 +207,10 @@ const idMp = route.params.idMp
 const namaMp = ref("")
 
 const capaian_pembelajaran = ref([])
+
+const snackbar = ref(false);
+const textSnackbar = ref("");
+const timeout = ref(2000);
 
 const forms = ref({
     elemen: "",
@@ -299,6 +309,8 @@ const save = async () => {
             forms.value.capaian_pembelajaran = ""
             dialog.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Disimpan";
+            snackbar.value = true;
         } else {
             console.error("Error respone data ", response.data)
         }
@@ -322,6 +334,8 @@ const deleteItemConfirm = async () => {
             console.log("Data deleted successfully:", response.data);
             loadData(); // Reload data after deletion
             dialogDelete.value = false;
+            textSnackbar.value = "Data Berhasil Dihapus";
+            snackbar.value = true;
         } else {
             console.error("Error response data:", response.data);
         }
@@ -360,6 +374,8 @@ const updateData = async () => {
             console.log("Data updated successfully:", response.data);
             loadData(); // Reload data after update
             dialogEdit.value = false;
+            textSnackbar.value = "Data Berhasil Diperbarui";
+            snackbar.value = true;
         } else {
             console.error("Error response data:", response.data);
         }

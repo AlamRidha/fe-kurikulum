@@ -165,6 +165,9 @@
                     @click="deleteItem(item.idProfil)"></v-btn>
             </template>
         </v-data-table>
+        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
+            <p class="text-center">{{ textSnackbar }}</p>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -177,6 +180,9 @@ import { formattedText } from '../helper/index';
 
 
 const dataProfilPelajar = ref([]);
+const snackbar = ref(false);
+const textSnackbar = ref("");
+const timeout = ref(2000);
 
 const forms = ref({
     dimensi: "",
@@ -280,6 +286,8 @@ const save = async () => {
 
             dialog.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Disimpan";
+            snackbar.value = true;
         } else {
             console.log("Error response save data", response.data)
         }
@@ -314,6 +322,8 @@ const updateData = async () => {
         if (response.status === 200) {
             dialogEdit.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Diperbarui";
+            snackbar.value = true;
         } else {
             console.log("Error response update data", response.data)
         }
@@ -336,6 +346,8 @@ const deleteItemConfirm = async () => {
         if (response.status === 200) {
             dialogDelete.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Dihapus";
+            snackbar.value = true;
         } else {
             console.log("Error response delete data", response.data)
         }

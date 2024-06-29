@@ -17,12 +17,12 @@
                     <v-icon icon="mdi mdi-town-hall" />
                 </template>
             </v-list-item>
-            <v-list-item to="/administrasiguru" title="Administrasi Guru" class="my-8">
+            <v-list-item to="/administrasiguru" title="Buku Guru" class="my-8">
                 <template v-slot:prepend>
                     <v-icon icon="mdi mdi-book" />
                 </template>
             </v-list-item>
-            <v-list-item to="/datalistguru" title="List Guru" class="my-8">
+            <v-list-item to="/datalistguru" title="Daftar Guru" class="my-8">
                 <template v-slot:prepend>
                     <v-icon icon="mdi mdi-account-card" />
                 </template>

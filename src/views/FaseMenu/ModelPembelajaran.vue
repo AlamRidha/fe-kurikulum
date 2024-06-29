@@ -367,7 +367,10 @@
                     @click="deleteItem(item.idModul)"></v-btn>
             </template>
         </v-data-table>
-
+        <!-- snackbar -->
+        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
+            <p class="text-center">{{ textSnackbar }}</p>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -389,9 +392,10 @@ const deskripsiCapaian = ref([]);
 const dataProfilPelajar = ref([])
 const namaDimensi = ref([])
 
-// function formattedText(text) {
-//     return text.replace(/\n/g, "<br>");
-// }
+const snackbar = ref(false);
+const textSnackbar = ref("");
+const timeout = ref(2000);
+
 
 const forms = ref({
     tahun_penyusunan: "",
@@ -564,6 +568,8 @@ const save = async () => {
 
             dialog.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Disimpan";
+            snackbar.value = true;
         } else {
             console.log("Error response save data model pembelajaran")
         }
@@ -587,6 +593,8 @@ const deleteItemConfirm = async () => {
             console.log("Data deleted successfully:", response.data);
             loadData(); // Reload data after deletion
             dialogDelete.value = false;
+            textSnackbar.value = "Data Berhasil Dihapus";
+            snackbar.value = true;
         } else {
             console.error("Error response data:", response.data);
         }
@@ -652,6 +660,8 @@ const updateData = async () => {
             console.log("Data updated successfully:", response.data);
             loadData(); // Reload data after update
             dialogEdit.value = false;
+            textSnackbar.value = "Data Berhasil Diperbarui";
+            snackbar.value = true;
 
         } else {
             console.error("Error response update data:", response.data);

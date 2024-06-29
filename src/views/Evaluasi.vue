@@ -254,6 +254,10 @@
                     @click="deleteItem(item.idEval)"></v-btn>
             </template>
         </v-data-table>
+        <!-- snackbar -->
+        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
+            <p class="text-center">{{ textSnackbar }}</p>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -265,6 +269,10 @@ import { formattedDate, formattedText } from "../helper/index"
 
 const data_evaluasi = ref([])
 const deleteId = ref('');
+
+const snackbar = ref(false);
+const textSnackbar = ref("");
+const timeout = ref(2000);
 
 // dialog
 const dialogDelete = ref(false)
@@ -412,6 +420,8 @@ const save = async () => {
 
             dialog.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Disimpan";
+            snackbar.value = true;
         } else {
             console.error("Error saving data ", response.data)
         }
@@ -435,6 +445,8 @@ const deleteItemConfirm = async () => {
         if (response.status === 200) {
             dialogDelete.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Dihapus";
+            snackbar.value = true;
         } else {
             console.error("Error delete data ", response.data)
         }
@@ -480,6 +492,8 @@ const updateData = async () => {
             console.log("Data berhasil diupdate")
             loadData()
             dialogEdit.value = false
+            textSnackbar.value = "Data Berhasil Diperbarui";
+            snackbar.value = true;
         } else {
             console.error("Error update data ", response.data)
         }

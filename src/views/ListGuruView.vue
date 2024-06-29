@@ -126,6 +126,11 @@
                     @click="deleteItem(item.idUser)"></v-btn>
             </template>
         </v-data-table>
+
+        <!-- snackbar -->
+        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
+            <p class="text-center">{{ textSnackbar }}</p>
+        </v-snackbar>
     </v-container>
 </template>
 
@@ -157,6 +162,9 @@ const deleteId = ref('');
 const searchData = ref("")
 
 const dataUser = ref([]);
+const snackbar = ref(false);
+const textSnackbar = ref("");
+const timeout = ref(2000);
 
 // rules
 const isFormValid = ref(false);
@@ -292,6 +300,8 @@ const save = async () => {
                 dialog.value = false
 
                 loadData()
+                textSnackbar.value = "Data Berhasil Disimpan";
+                snackbar.value = true;
             } else {
                 console.error("Error save data", response.data)
             }
@@ -343,6 +353,8 @@ const updateData = async () => {
             console.log("Data updated successfully:", response.data)
             loadData()
             dialogEdit.value = false
+            textSnackbar.value = "Data Berhasil Diperbarui";
+            snackbar.value = true;
         } else {
             console.error("Error update data:", response.data)
         }
@@ -366,6 +378,8 @@ const deleteItemConfirm = async () => {
             console.log("Data deleted successfully:", response.data);
             loadData(); // Reload data after deletion
             dialogDelete.value = false;
+            textSnackbar.value = "Data Berhasil Dihapus";
+            snackbar.value = true;
         } else {
             console.error("Error deleting data:", response.data);
         }
