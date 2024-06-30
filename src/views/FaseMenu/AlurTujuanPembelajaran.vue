@@ -39,9 +39,10 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="forms.tahap" label="Tahap"></v-text-field>
-                                        <textarea v-model="forms.alur_tujuan_pembelajaran" cols="65" rows="10"
-                                            class="border-sm elevation-2 pa-2" placeholder="Alur Tujuan Pembelajaran"
-                                            label="Alur Tujuan Pembelajaran"></textarea>
+                                        <!-- <v-textarea v-model="forms.alur_tujuan_pembelajaran" class="rounded-xl"
+                                            bg-color="grey-lighten-2" label="Alur Tujuan Pembelajaran"></v-textarea> -->
+                                        <v-combobox v-model="forms.alur_tujuan_pembelajaran" :items="deskripsti_tp"
+                                            label="Alur Tujuan Pembelajaran" multiple chips class="pe-4"></v-combobox>
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -69,9 +70,10 @@
                                 <v-container class="py-4">
                                     <v-form ref="form">
                                         <v-text-field v-model="formsEdit.tahap" label="Tahap"></v-text-field>
-                                        <textarea v-model="formsEdit.alur_tujuan_pembelajaran" cols="65" rows="10"
-                                            class="border-sm elevation-2 pa-2"
-                                            label="Alur Tujuan Pembelajaran"></textarea>
+                                        <!-- <v-textarea v-model="formsEdit.alur_tujuan_pembelajaran" class="rounded-xl"
+                                            bg-color="grey-lighten-2" label="Alur Tujuan Pembelajaran"></v-textarea> -->
+                                        <v-combobox v-model="formsEdit.alur_tujuan_pembelajaran" :items="deskripsti_tp"
+                                            label="Alur Tujuan Pembelajaran" multiple chips class="pe-4"></v-combobox>
                                     </v-form>
                                 </v-container>
                             </v-card-text>
@@ -174,12 +176,16 @@
             </template>
         </v-data-table>
 
+        <!-- snackbar -->
+        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
+            <p class="text-center">{{ textSnackbar }}</p>
+        </v-snackbar>
     </v-container>
 </template>
 
 <script setup>
 import MenuTitle from '../../components/MenuTitle.vue';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, computed } from 'vue';
 import axios from "axios";
 import { useRoute } from 'vue-router';
 import { jsPDF } from 'jspdf';
@@ -190,16 +196,23 @@ const route = useRoute()
 const idMp = route.params.idMp
 const alur_tujuan_pembelajaran = ref([])
 const namaMp = ref("")
+const tujuan_pembelajaran = ref([])
+const deskripsti_tp = ref([])
+
+const snackbar = ref(false);
+const textSnackbar = ref("");
+const timeout = ref(2000);
+
 
 const forms = ref({
     tahap: "",
-    alur_tujuan_pembelajaran: "",
+    alur_tujuan_pembelajaran: [],
 })
 
 const formsEdit = ref({
     idAtp: "",
     tahap: "",
-    alur_tujuan_pembelajaran: "",
+    alur_tujuan_pembelajaran: [],
 })
 
 const dataShow = ref({
@@ -277,7 +290,7 @@ const save = async () => {
     try {
         const newData = {
             tahap: forms.value.tahap,
-            alur_tujuan_pembelajaran: forms.value.alur_tujuan_pembelajaran,
+            alur_tujuan_pembelajaran: forms.value.alur_tujuan_pembelajaran.join("\n").toString(),
         }
 
         // console.log(newData)
@@ -288,6 +301,8 @@ const save = async () => {
             forms.value.alur_tujuan_pembelajaran = ""
             dialog.value = false
             loadData()
+            textSnackbar.value = "Data Berhasil Disimpan";
+            snackbar.value = true;
         } else {
             console.error("Error respone data ", response.data)
         }
@@ -311,6 +326,8 @@ const deleteItemConfirm = async () => {
             console.log("Data deleted successfully:", response.data);
             loadData(); // Reload data after deletion
             dialogDelete.value = false;
+            textSnackbar.value = "Data Berhasil Dihapus";
+            snackbar.value = true;
         } else {
             console.error("Error response data:", response.data);
         }
@@ -331,7 +348,7 @@ const editItem = async (id) => {
         formsEdit.value = {
             idAtp: data.idAtp,
             tahap: data.tahap,
-            alur_tujuan_pembelajaran: data.alur_tujuan_pembelajaran,
+            alur_tujuan_pembelajaran: data.alur_tujuan_pembelajaran.split('\n'),
         }
     } catch (error) {
         console.error("Error get data", error)
@@ -350,6 +367,8 @@ const updateData = async () => {
             console.log("Data updated successfully:", response.data);
             loadData(); // Reload data after update
             dialogEdit.value = false;
+            textSnackbar.value = "Data Berhasil Diperbarui";
+            snackbar.value = true;
         } else {
             console.error("Error response data:", response.data);
         }
@@ -408,6 +427,20 @@ const getMatapelajaran = async () => {
     }
 }
 
+
+const getTujuanPembelajaran = async () => {
+    try {
+        const response = await axios.get(`http://localhost:3000/kurikulum/${idMp}/tujuan_pembelajaran`)
+        const data = response.data
+        tujuan_pembelajaran.value = data
+        deskripsti_tp.value = tujuan_pembelajaran.value.map(tp => tp.tujuan_pembelajaran);
+        console.log("Data tujuan pembelajaran", deskripsti_tp.value)
+    } catch (error) {
+        console.error("Error response data")
+    }
+}
+
+
 const showItem = async (id) => {
     dialogShow.value = true;
     // console.log(id)
@@ -428,6 +461,7 @@ const showItem = async (id) => {
 onMounted(() => {
     getMatapelajaran()
     loadData()
+    getTujuanPembelajaran()
 })
 
 </script>

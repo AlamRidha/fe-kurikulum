@@ -5,7 +5,6 @@
         <v-data-table :headers="headers" :items="tujuan_pembelajaran" :items-per-page="5" class="elevation-5 mt-4">
             <!-- <template v-slot:item.no="{ index }">
                 {{ index + 1 }} </template> -->
-
             <template v-slot:item.elemen_capaian="{ item }">
                 <template v-if="!item.isMerged">
                     <span class="font-weight-bold">{{ item.elemen_capaian }}</span>
@@ -290,7 +289,6 @@ function closeEdit() {
 function closeShow() {
     dialogShow.value = false;
 }
-
 
 
 // get data capaian from capaian_pembelajaran
