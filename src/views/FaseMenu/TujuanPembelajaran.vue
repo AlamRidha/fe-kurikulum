@@ -5,7 +5,7 @@
         <v-data-table :headers="headers" :items="tujuan_pembelajaran" :items-per-page="5" class="elevation-5 mt-4">
             <!-- <template v-slot:item.no="{ index }">
                 {{ index + 1 }} </template> -->
-            <template v-slot:item.elemen_capaian="{ item }">
+            <!-- <template v-slot:item.elemen_capaian="{ item }">
                 <template v-if="!item.isMerged">
                     <span class="font-weight-bold">{{ item.elemen_capaian }}</span>
                 </template>
@@ -14,13 +14,41 @@
                         <span :rowspan="item.rowspan">{{ item.elemen_capaian }}</span>
                     </template>
                 </template>
+            </template> -->
+
+            <template v-slot:item="{ item, index }">
+                <tr v-for="(data_tujuan, tpIndex) in item.tujuan_pembelajaran" :key="tpIndex">
+                    <td v-if="tpIndex === 0" :rowspan="item.tujuan_pembelajaran.length">{{ index + 1 }}</td>
+                    <td v-if="tpIndex === 0" :rowspan="item.tujuan_pembelajaran.length">{{ item.elemen_capaian }}</td>
+                    <!-- <td>{{ data_tujuan.tujuan }}</td> -->
+                    <td>
+                        <span class="d-inline-block text-truncate text-left" style="max-width: 600px;">
+                            {{ data_tujuan.tujuan_pembelajaran }}
+                        </span>
+                    </td>
+                    <td>
+                        <v-btn density="comfortable" icon="mdi mdi-eye-outline" color="cyan-accent-4" class="mx-2"
+                            @click="showItem(data_tujuan.idTp)"></v-btn>
+                        <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
+                            @click="editItem(data_tujuan.idTp)"></v-btn>
+                        <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
+                            @click="deleteItem(data_tujuan.idTp)"></v-btn>
+                    </td>
+                </tr>
             </template>
 
+            <!-- <template v-slot:item="{ item }">
+                <tr v-for="(x, index) in item.tujuan_pembelajaran" :key="index">
+                    <td v-if="index === 0" :rowspan="item.tujuan_pembelajaran.length">{{ item.elemen_capaian }}</td>
+                    <td>{{ x }}</td>
+                </tr>
+            </template> -->
 
-            <template v-slot:item.tujuan_pembelajaran="{ item }">
-                <span class="d-inline-block text-truncate text-left" style="max-width: 600px;">{{
+
+            <!-- <template v-slot:item.tujuan_pembelajaran="{ item }">
+                <span class="d-inline-block text-truncate text-left" style="max-width: 100px;">{{
             item.tujuan_pembelajaran }}
-                </span> </template>
+                </span> </template> -->
 
             <template v-slot:top>
                 <v-toolbar flat>
@@ -180,14 +208,14 @@
                 </v-toolbar>
             </template>
 
-            <template v-slot:item.actions="{ item }">
+            <!-- <template v-slot:item.actions="{ item }">
                 <v-btn density="comfortable" icon="mdi mdi-eye-outline" color="cyan-accent-4" class="mx-2"
                     @click="showItem(item.idTp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
                     @click="editItem(item.idTp)"></v-btn>
                 <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
                     @click="deleteItem(item.idTp)"></v-btn>
-            </template>
+            </template> -->
 
         </v-data-table>
 
@@ -239,13 +267,13 @@ const dataShow = ref({
 
 
 const headers = ref([
-    // {
-    //     title: 'No',
-    //     align: 'center',
-    //     sortable: false,
-    //     key: 'no',
-    //     value: 'id',
-    // },
+    {
+        title: 'No',
+        align: 'center',
+        sortable: false,
+        key: 'no',
+        value: 'id',
+    },
     {
         title: 'Elemen Capaian Pembelajaran',
         align: 'center',
@@ -312,47 +340,26 @@ const loadData = async () => {
         // tujuan_pembelajaran.value = data
         // console.log("Data tujuan pembelajaran", data)
 
-        // Buat objek untuk menampung data yang sudah di-grupkan
-        let groupedData = {};
-        // Grupkan data berdasarkan elemen_capaian
-        data.forEach(item => {
-            if (!groupedData[item.elemen_capaian]) {
-                groupedData[item.elemen_capaian] = [];
+        const groupedData = data.reduce((acc, item) => {
+            // const { elemen_capaian, tujuan_pembelajaran } = item;
+            const { elemen_capaian, tujuan_pembelajaran, idTp } = item;
+            if (!acc[elemen_capaian]) {
+                acc[elemen_capaian] = {
+                    elemen_capaian: elemen_capaian,
+                    tujuan_pembelajaran: []
+                };
             }
-            groupedData[item.elemen_capaian].push(item);
-        });
+            // acc[elemen_capaian].tujuan_pembelajaran.push(tujuan_pembelajaran);
+            acc[elemen_capaian].tujuan_pembelajaran.push({ tujuan_pembelajaran: tujuan_pembelajaran, idTp: idTp });
+            return acc;
+        }, {});
 
-        // Inisialisasi hasil akhir yang akan digunakan di tabel
-        let result = [];
+        const result = Object.values(groupedData);
 
-        // Iterasi melalui objek yang sudah di-grupkan
-        for (const elemenCapaian in groupedData) {
-            if (groupedData.hasOwnProperty(elemenCapaian)) {
-                const group = groupedData[elemenCapaian];
+        console.log(result);
 
-                // Tentukan jumlah baris (rowspan) untuk setiap grup
-                const rowspan = group.length;
-
-                // Iterasi untuk menambahkan data ke result dengan properti rowspan dan isMerged
-                group.forEach((item, index) => {
-                    if (index === 0) {
-                        result.push({
-                            ...item,
-                            rowspan: rowspan,  // Menambahkan rowspan ke elemen pertama dari grup
-                            isMerged: false,   // Menandai elemen pertama dari grup sebagai tidak digabungkan
-                        });
-                    } else {
-                        result.push({
-                            ...item,
-                            isMerged: true,  // Menandai elemen lain dari grup sebagai digabungkan
-                            nomor: null
-                        });
-                    }
-                });
-            }
-        }
         tujuan_pembelajaran.value = result
-        // console.log(groupedData)
+        // console.log(data)
     } catch (error) {
         console.error("Error get data ", error)
     }
@@ -469,17 +476,17 @@ const downloadPDF = () => {
     doc.setFontSize(18);
     doc.text(sekolah, 60, 35);
 
-    // data tabel
-    // const data = tujuan_pembelajaran.value.map((item, index) =>
-    //     [index + 1, item.elemen_capaian, item.tujuan_pembelajaran]
-    // )
+
     // Grupkan data berdasarkan elemen capaian
     let groupedData = {};
+
     tujuan_pembelajaran.value.forEach(item => {
         if (!groupedData[item.elemen_capaian]) {
             groupedData[item.elemen_capaian] = [];
         }
-        groupedData[item.elemen_capaian].push(item);
+        item.tujuan_pembelajaran.forEach(tp => {
+            groupedData[item.elemen_capaian].push(tp.tujuan_pembelajaran);
+        });
     });
 
     // Buat data tabel dengan elemen capaian yang digabungkan
@@ -490,15 +497,15 @@ const downloadPDF = () => {
     for (const elemenCapaian in groupedData) {
         if (groupedData.hasOwnProperty(elemenCapaian)) {
             const group = groupedData[elemenCapaian];
-            firstRow = true;
+            let firstRow = true;
 
-            group.forEach((item, i) => {
+            group.forEach((tujuanPembelajaran) => {
                 if (firstRow) {
-                    data.push([index, item.elemen_capaian, item.tujuan_pembelajaran]);
+                    data.push([index, elemenCapaian, tujuanPembelajaran]);
                     firstRow = false;
                     index++;
                 } else {
-                    data.push(['', '', item.tujuan_pembelajaran]);
+                    data.push(['', '', tujuanPembelajaran]);
                 }
             });
         }
@@ -537,6 +544,7 @@ const getMatapelajaran = async () => {
 
 const showItem = async (id) => {
     dialogShow.value = true;
+    // console.log(id)
     try {
         const response = await axios.get(`http://localhost:3000/kurikulum/tujuan_pembelajaran/${id}`)
         const data = response.data
