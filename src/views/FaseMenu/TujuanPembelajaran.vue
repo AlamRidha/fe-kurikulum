@@ -3,19 +3,7 @@
         <MenuTitle msg="Menu | Kurikulum Tujuan Pembelajaran" class="text-subtitle-1 font-weight-medium " />
 
         <v-data-table :headers="headers" :items="tujuan_pembelajaran" :items-per-page="5" class="elevation-5 mt-4">
-            <!-- <template v-slot:item.no="{ index }">
-                {{ index + 1 }} </template> -->
-            <!-- <template v-slot:item.elemen_capaian="{ item }">
-                <template v-if="!item.isMerged">
-                    <span class="font-weight-bold">{{ item.elemen_capaian }}</span>
-                </template>
-                <template v-else>
-                    <template v-if="item.rowspan > 1">
-                        <span :rowspan="item.rowspan">{{ item.elemen_capaian }}</span>
-                    </template>
-                </template>
-            </template> -->
-
+        
             <template v-slot:item="{ item, index }">
                 <tr v-for="(data_tujuan, tpIndex) in item.tujuan_pembelajaran" :key="tpIndex">
                     <td v-if="tpIndex === 0" :rowspan="item.tujuan_pembelajaran.length">{{ index + 1 }}</td>
