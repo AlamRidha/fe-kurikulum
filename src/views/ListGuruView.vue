@@ -1,165 +1,277 @@
 <template>
-    <v-container fluid>
-        <MenuTitle msg="Menu | List Guru" class="text-subtitle-1 font-weight-medium " />
-        <v-row class="d-flex flex-row-reverse">
-            <v-col md="4">
-                <v-text-field v-model="searchData" append-icon="mdi mdi-magnify" single-line
-                    placeholder="Cari Nama Guru..." hide-details></v-text-field>
-            </v-col>
-        </v-row>
+  <v-container fluid>
+    <MenuTitle
+      msg="Menu | List Guru"
+      class="text-subtitle-1 font-weight-medium"
+    />
+    <v-row class="d-flex flex-row-reverse">
+      <v-col md="4">
+        <v-text-field
+          v-model="searchData"
+          append-icon="mdi mdi-magnify"
+          single-line
+          placeholder="Cari Nama Guru..."
+          hide-details
+        ></v-text-field>
+      </v-col>
+    </v-row>
 
-        <v-data-table :headers="headers" :items="filteredData" :items-per-page="5" class="elevation-5 mt-4"
-            :search="searchData">
-            <template v-slot:item.no="{ index }">
-                {{ index + 1 }} </template>
+    <v-data-table
+      :headers="filteredHeaders"
+      :items="filteredData"
+      :items-per-page="5"
+      class="elevation-5 mt-4"
+      :search="searchData"
+    >
+      <template v-slot:item.no="{ index }"> {{ index + 1 }} </template>
 
-            <template v-slot:top>
-                <v-toolbar flat>
-                    <v-toolbar-title>Data Guru</v-toolbar-title>
-                    <v-divider class="mx-4" inset vertical></v-divider>
-                    <v-spacer></v-spacer>
+      <template v-slot:top>
+        <v-toolbar flat>
+          <v-toolbar-title>Data Guru</v-toolbar-title>
+          <v-divider class="mx-4" inset vertical></v-divider>
+          <v-spacer></v-spacer>
 
-                    <!-- modal tambah -->
-                    <v-dialog v-model="dialog" max-width="550px">
-                        <template v-slot:activator="{ props }">
-                            <v-btn class="mb-2" variant="outlined" color="primary" dark v-bind="props"
-                                prepend-icon="mdi mdi-plus">
-                                Tambah Data Guru
-                            </v-btn>
-                        </template>
-                        <v-card class="py-3 px-2">
-                            <v-card-title>
-                                <span class="text-h5">Form Guru</span>
-                            </v-card-title>
-
-                            <v-card-text>
-                                <v-container class="py-4">
-                                    <v-form ref="form" v-model="isFormValid">
-                                        <v-text-field v-model="forms.nameUser" label="Nama Guru"
-                                            :rules="nameRules"></v-text-field>
-                                        <v-text-field v-model="forms.nip" label="NIP" :rules="nipRules"></v-text-field>
-                                        <v-text-field v-model="forms.password" label="Password"
-                                            :rules="passwordRules"></v-text-field>
-                                        <v-text-field v-model="forms.email" label="Email"
-                                            :rules="emailRules"></v-text-field>
-                                        <v-text-field v-model="forms.noHp" label="No Handphone"
-                                            :rules="noHpRules"></v-text-field>
-                                        <v-text-field v-model="forms.bidangMataPelajaran" label="Bidang Mata Pelajaran"
-                                            :rules="bidangRules"></v-text-field>
-                                    </v-form>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="error" variant="text" @click="close" elevation="4">
-                                    Batal
-                                </v-btn>
-                                <v-btn color="blue-darken-1" variant="text" @click="save" elevation="4">
-                                    Simpan
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-
-                    <!-- modal edit -->
-                    <v-dialog v-model="dialogEdit" max-width="500px">
-                        <v-card class="py-3 px-2">
-                            <v-card-title>
-                                <span class="text-h5">Edit Data Guru</span>
-                            </v-card-title>
-
-                            <v-card-text>
-                                <v-container class="py-4">
-                                    <v-form ref="form" v-model="isFormValid">
-                                        <v-text-field v-model="formsEdit.nameUser" label="Nama Guru"
-                                            :rules="nameRules"></v-text-field>
-                                        <v-text-field v-model="formsEdit.nip" label="NIP"
-                                            :rules="nipRules"></v-text-field>
-                                        <v-text-field v-model="formsEdit.password" label="Password"
-                                            :rules="passwordRules" :type="show ? 'text' : 'password'"
-                                            :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-                                            @click:append="show = !show"></v-text-field>
-                                        <v-text-field v-model="formsEdit.email" label="Email"
-                                            :rules="emailRules"></v-text-field>
-                                        <v-text-field v-model="formsEdit.noHp" label="No Handphone"
-                                            :rules="noHpRules"></v-text-field>
-                                        <v-text-field v-model="formsEdit.bidangMataPelajaran"
-                                            label="Bidang Mata Pelajaran" :rules="bidangRules"></v-text-field>
-                                    </v-form>
-                                </v-container>
-                            </v-card-text>
-
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="error" variant="text" @click="closeEdit" elevation="4">
-                                    Batal
-                                </v-btn>
-                                <v-btn color="blue-darken-1" variant="text" @click="updateData" elevation="4">
-                                    Simpan Data
-                                </v-btn>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-
-                    <!-- modal hapus -->
-                    <v-dialog v-model="dialogDelete" max-width="500px">
-                        <v-card class="pa-5 rounded-lg">
-                            <v-card-title class="text-h5 text-center">Apakah Anda Yakin <br> Ingin Menghapus Akun
-                                Ini?</v-card-title>
-                            <v-card-actions>
-                                <v-spacer></v-spacer>
-                                <v-btn color="error" variant="elevated" @click="closeDelete" elevation="4">Batal</v-btn>
-                                <v-btn color="blue-darken-1" variant="outlined" @click="deleteItemConfirm"
-                                    elevation="4">Hapus Akun</v-btn>
-                                <v-spacer></v-spacer>
-                            </v-card-actions>
-                        </v-card>
-                    </v-dialog>
-                </v-toolbar>
+          <!-- modal tambah -->
+          <v-dialog v-model="dialog" max-width="550px">
+            <template v-slot:activator="{ props }">
+              <v-btn
+                class="mb-2"
+                variant="outlined"
+                color="primary"
+                dark
+                v-bind="props"
+                prepend-icon="mdi mdi-plus"
+                v-if="roleUser === 1"
+              >
+                Tambah Data Guru
+              </v-btn>
             </template>
+            <v-card class="py-3 px-2">
+              <v-card-title>
+                <span class="text-h5">Form Guru</span>
+              </v-card-title>
 
-            <template v-slot:item.aksi="{ item }">
-                <v-btn density="comfortable" icon="mdi mdi-pen" color="success" class="mx-2"
-                    @click="editItem(item.idUser)"></v-btn>
-                <v-btn density="comfortable" icon="mdi mdi-delete" color="error" class="mx-2"
-                    @click="deleteItem(item.idUser)"></v-btn>
-            </template>
-        </v-data-table>
+              <v-card-text>
+                <v-container class="py-4">
+                  <v-form ref="form" v-model="isFormValid">
+                    <v-text-field
+                      v-model="forms.nameUser"
+                      label="Nama Guru"
+                      :rules="nameRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="forms.nip"
+                      label="NIP"
+                      :rules="nipRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="forms.password"
+                      label="Password"
+                      :rules="passwordRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="forms.email"
+                      label="Email"
+                      :rules="emailRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="forms.noHp"
+                      label="No Handphone"
+                      :rules="noHpRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="forms.bidangMataPelajaran"
+                      label="Bidang Mata Pelajaran"
+                      :rules="bidangRules"
+                    ></v-text-field>
+                  </v-form>
+                </v-container>
+              </v-card-text>
 
-        <!-- snackbar -->
-        <v-snackbar v-model="snackbar" :timeout="timeout" color="blue-grey" rounded="pill" width="200">
-            <p class="text-center">{{ textSnackbar }}</p>
-        </v-snackbar>
-    </v-container>
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  variant="text"
+                  @click="close"
+                  elevation="4"
+                >
+                  Batal
+                </v-btn>
+                <v-btn
+                  color="blue-darken-1"
+                  variant="text"
+                  @click="save"
+                  elevation="4"
+                >
+                  Simpan
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <!-- modal edit -->
+          <v-dialog v-model="dialogEdit" max-width="500px">
+            <v-card class="py-3 px-2">
+              <v-card-title>
+                <span class="text-h5">Edit Data Guru</span>
+              </v-card-title>
+
+              <v-card-text>
+                <v-container class="py-4">
+                  <v-form ref="form" v-model="isFormValid">
+                    <v-text-field
+                      v-model="formsEdit.nameUser"
+                      label="Nama Guru"
+                      :rules="nameRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="formsEdit.nip"
+                      label="NIP"
+                      :rules="nipRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="formsEdit.password"
+                      label="Password"
+                      :rules="passwordRules"
+                      :type="show ? 'text' : 'password'"
+                      :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+                      @click:append="show = !show"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="formsEdit.email"
+                      label="Email"
+                      :rules="emailRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="formsEdit.noHp"
+                      label="No Handphone"
+                      :rules="noHpRules"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="formsEdit.bidangMataPelajaran"
+                      label="Bidang Mata Pelajaran"
+                      :rules="bidangRules"
+                    ></v-text-field>
+                  </v-form>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  variant="text"
+                  @click="closeEdit"
+                  elevation="4"
+                >
+                  Batal
+                </v-btn>
+                <v-btn
+                  color="blue-darken-1"
+                  variant="text"
+                  @click="updateData"
+                  elevation="4"
+                >
+                  Simpan Data
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+
+          <!-- modal hapus -->
+          <v-dialog v-model="dialogDelete" max-width="500px">
+            <v-card class="pa-5 rounded-lg">
+              <v-card-title class="text-h5 text-center"
+                >Apakah Anda Yakin <br />
+                Ingin Menghapus Akun Ini?</v-card-title
+              >
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                  color="error"
+                  variant="elevated"
+                  @click="closeDelete"
+                  elevation="4"
+                  >Batal</v-btn
+                >
+                <v-btn
+                  color="blue-darken-1"
+                  variant="outlined"
+                  @click="deleteItemConfirm"
+                  elevation="4"
+                  >Hapus Akun</v-btn
+                >
+                <v-spacer></v-spacer>
+              </v-card-actions>
+            </v-card>
+          </v-dialog>
+        </v-toolbar>
+      </template>
+
+      <template v-slot:item.aksi="{ item }">
+        <v-btn
+          density="comfortable"
+          icon="mdi mdi-pen"
+          color="success"
+          class="mx-2"
+          @click="editItem(item.idUser)"
+          v-if="roleUser === 1"
+        ></v-btn>
+        <v-btn
+          density="comfortable"
+          icon="mdi mdi-delete"
+          color="error"
+          class="mx-2"
+          @click="deleteItem(item.idUser)"
+          v-if="roleUser === 1"
+        ></v-btn>
+      </template>
+    </v-data-table>
+
+    <!-- snackbar -->
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="timeout"
+      color="blue-grey"
+      rounded="pill"
+      width="200"
+    >
+      <p class="text-center">{{ textSnackbar }}</p>
+    </v-snackbar>
+  </v-container>
 </template>
 
 <script setup>
 import axios from "axios";
-import MenuTitle from "../components/MenuTitle.vue"
-import { ref, onMounted, computed } from "vue"
+import MenuTitle from "../components/MenuTitle.vue";
+import { ref, onMounted, computed } from "vue";
+import { useAuthStore } from "../stores/useAuthStore";
 
-const show = ref(false)
+const userStore = useAuthStore();
+const roleUser = userStore.user.idUser;
+
+const show = ref(false);
 const forms = ref({
-    nip: "",
-    nameUser: "",
-    password: "",
-    email: "",
-    noHp: "",
-    bidangMataPelajaran: "",
-})
+  nip: "",
+  nameUser: "",
+  password: "",
+  email: "",
+  noHp: "",
+  bidangMataPelajaran: "",
+});
 
 const formsEdit = ref({
-    idUser: "",
-    nip: "",
-    nameUser: "",
-    password: "",
-    email: "",
-    noHp: "",
-    bidangMataPelajaran: "",
-})
-const deleteId = ref('');
-const searchData = ref("")
+  idUser: "",
+  nip: "",
+  nameUser: "",
+  password: "",
+  email: "",
+  noHp: "",
+  bidangMataPelajaran: "",
+});
+const deleteId = ref("");
+const searchData = ref("");
 
 const dataUser = ref([]);
 const snackbar = ref(false);
@@ -168,224 +280,234 @@ const timeout = ref(2000);
 
 // rules
 const isFormValid = ref(false);
-const nameRules = [v => !!v || 'Nama Guru wajib diisi'];
-const nipRules = [v => !!v || 'NIP wajib diisi'];
+const nameRules = [(v) => !!v || "Nama Guru wajib diisi"];
+const nipRules = [(v) => !!v || "NIP wajib diisi"];
 
 const passwordRules = [
-    v => !!v || 'Password wajib diisi',
-    v => (v && v.length >= 5) || 'Password minimal 5 karakter'
+  (v) => !!v || "Password wajib diisi",
+  (v) => (v && v.length >= 5) || "Password minimal 5 karakter",
 ];
-const emailRules = [v => !!v || 'Email wajib diisi'];
+const emailRules = [(v) => !!v || "Email wajib diisi"];
 const noHpRules = [
-    v => !!v || 'No Handphone wajib diisi',
-    v => (v && v.length <= 13) || 'No Handphone maksmimal 13 karakter'
+  (v) => !!v || "No Handphone wajib diisi",
+  (v) => (v && v.length <= 13) || "No Handphone maksmimal 13 karakter",
 ];
-const bidangRules = [v => !!v || 'Bidang Mata Pelajaran wajib diisi'];
+const bidangRules = [(v) => !!v || "Bidang Mata Pelajaran wajib diisi"];
 
 // dialog
-const dialogDelete = ref(false)
-const dialog = ref(false)
-const dialogEdit = ref(false)
+const dialogDelete = ref(false);
+const dialog = ref(false);
+const dialogEdit = ref(false);
 
 function close() {
-    dialog.value = false
+  dialog.value = false;
 }
 
 function closeDelete() {
-    dialogDelete.value = false
+  dialogDelete.value = false;
 }
 
 function closeEdit() {
-    dialogEdit.value = false
+  dialogEdit.value = false;
 }
 
 // judul tabel
 const headers = ref([
-    {
-        title: 'No',
-        align: 'start',
-        sortable: false,
-        key: 'no',
-        value: 'id',
-    },
-    {
-        title: 'Nama Guru',
-        align: 'start',
-        sortable: false,
-        key: 'nameUser',
-    },
-    {
-        title: 'NIP',
-        key: 'nip',
-        sortable: false,
-    },
-    {
-        title: 'Email',
-        key: 'email',
-        sortable: false
-    },
-    {
-        title: 'No Handphone',
-        key: 'noHp',
-        sortable: false,
-    },
-    {
-        title: 'Jabatan',
-        key: 'bidangMataPelajaran',
-        sortable: false,
-    },
-    {
-        title: 'Aksi',
-        align: 'center',
-        key: 'aksi',
-        sortable: false
-    },
-])
+  {
+    title: "No",
+    align: "start",
+    sortable: false,
+    key: "no",
+    value: "id",
+  },
+  {
+    title: "Nama Guru",
+    align: "start",
+    sortable: false,
+    key: "nameUser",
+  },
+  {
+    title: "NIP",
+    key: "nip",
+    sortable: false,
+  },
+  {
+    title: "Email",
+    key: "email",
+    sortable: false,
+  },
+  {
+    title: "No Handphone",
+    key: "noHp",
+    sortable: false,
+  },
+  {
+    title: "Jabatan",
+    key: "bidangMataPelajaran",
+    sortable: false,
+  },
+  {
+    title: "Aksi",
+    align: "center",
+    key: "aksi",
+    sortable: false,
+  },
+]);
 
-
+const filteredHeaders = computed(() => {
+  if (roleUser === 1) {
+    return headers.value;
+  } else {
+    return headers.value.filter((header) => header.key !== "aksi");
+  }
+});
 
 onMounted(() => {
-    loadData()
-})
+  loadData();
+});
 
 // panggil get all data
 const loadData = async () => {
-    try {
-        const response = await axios.get("http://localhost:3000/users")
-        const data = response.data
-        dataUser.value = data
-        console.log(data)
-    } catch (error) {
-        console.log("Error get data ", error)
-    }
-}
+  try {
+    const response = await axios.get("http://localhost:3000/users");
+    const data = response.data;
+    dataUser.value = data;
+    console.log(data);
+  } catch (error) {
+    console.log("Error get data ", error);
+  }
+};
 
 const filteredData = computed(() => {
-    return dataUser.value.filter((item) => {
-        return (
-            // filter agar id admin tidak nampil di data
-            item.idUser !== 1 && (
-                item.nameUser.toLowerCase().includes(searchData.value.toLowerCase()) ||
-                item.nip.toLowerCase().includes(searchData.value.toLowerCase()) ||
-                item.email.toLowerCase().includes(searchData.value.toLowerCase()) ||
-                item.noHp.toLowerCase().includes(searchData.value.toLowerCase()) ||
-                item.bidangMataPelajaran.toLowerCase().includes(searchData.value.toLowerCase())
-            )
-        );
-    });
+  return dataUser.value.filter((item) => {
+    return (
+      // filter agar id admin tidak nampil di data
+      item.idUser !== 1 &&
+      (item.nameUser.toLowerCase().includes(searchData.value.toLowerCase()) ||
+        item.nip.toLowerCase().includes(searchData.value.toLowerCase()) ||
+        item.email.toLowerCase().includes(searchData.value.toLowerCase()) ||
+        item.noHp.toLowerCase().includes(searchData.value.toLowerCase()) ||
+        item.bidangMataPelajaran
+          .toLowerCase()
+          .includes(searchData.value.toLowerCase()))
+    );
+  });
 });
 
 // menyimpan data
 const save = async () => {
-    if (isFormValid.value) {
-        try {
-            const newData = {
-                nip: forms.value.nip,
-                nameUser: forms.value.nameUser,
-                password: forms.value.password,
-                email: forms.value.email,
-                noHp: forms.value.noHp,
-                bidangMataPelajaran: forms.value.bidangMataPelajaran,
-            }
-            // console.log(newData)
+  if (isFormValid.value) {
+    try {
+      const newData = {
+        nip: forms.value.nip,
+        nameUser: forms.value.nameUser,
+        password: forms.value.password,
+        email: forms.value.email,
+        noHp: forms.value.noHp,
+        bidangMataPelajaran: forms.value.bidangMataPelajaran,
+      };
+      // console.log(newData)
 
-            const response = await axios.post("http://localhost:3000/users", newData)
-            if (response.status === 200) {
-                forms.value.nip = ""
-                forms.value.nameUser = ""
-                forms.value.password = ""
-                forms.value.email = ""
-                forms.value.noHp = ""
-                forms.value.bidangMataPelajaran = ""
-                dialog.value = false
+      const response = await axios.post("http://localhost:3000/users", newData);
+      if (response.status === 200) {
+        forms.value.nip = "";
+        forms.value.nameUser = "";
+        forms.value.password = "";
+        forms.value.email = "";
+        forms.value.noHp = "";
+        forms.value.bidangMataPelajaran = "";
+        dialog.value = false;
 
-                loadData()
-                textSnackbar.value = "Data Berhasil Disimpan";
-                snackbar.value = true;
-            } else {
-                console.error("Error save data", response.data)
-            }
-        } catch (error) {
-            console.log("Error save data", error)
-        }
-    } else {
-        console.log("Form tidak valid")
+        loadData();
+        textSnackbar.value = "Data Berhasil Disimpan";
+        snackbar.value = true;
+      } else {
+        console.error("Error save data", response.data);
+      }
+    } catch (error) {
+      console.log("Error save data", error);
     }
-}
-
+  } else {
+    console.log("Form tidak valid");
+  }
+};
 
 // mengambil data berdasarkan id untuk edit
 const editItem = async (id) => {
-    dialogEdit.value = true;
+  dialogEdit.value = true;
 
-    try {
-        const response = await axios.get(`http://localhost:3000/users/${id}`)
-        const data = response.data
-        // console.log(data)
-        formsEdit.value = {
-            idUser: data.idUser,
-            nip: data.nip,
-            nameUser: data.nameUser,
-            password: data.password,
-            email: data.email,
-            noHp: data.noHp,
-            bidangMataPelajaran: data.bidangMataPelajaran,
-        }
-    } catch (error) {
-        console.error("Error get data", error)
-    }
-}
+  try {
+    const response = await axios.get(`http://localhost:3000/users/${id}`);
+    const data = response.data;
+    // console.log(data)
+    formsEdit.value = {
+      idUser: data.idUser,
+      nip: data.nip,
+      nameUser: data.nameUser,
+      password: data.password,
+      email: data.email,
+      noHp: data.noHp,
+      bidangMataPelajaran: data.bidangMataPelajaran,
+    };
+  } catch (error) {
+    console.error("Error get data", error);
+  }
+};
 
 const updateData = async () => {
-    try {
-        const updatedData = {
-            nip: formsEdit.value.nip,
-            nameUser: formsEdit.value.nameUser,
-            password: formsEdit.value.password,
-            email: formsEdit.value.email,
-            noHp: formsEdit.value.noHp,
-            bidangMataPelajaran: formsEdit.value.bidangMataPelajaran,
-        }
-        // console.log(formsEdit.value.idUser, " dan ", updatedData.nameUser)
+  try {
+    const updatedData = {
+      nip: formsEdit.value.nip,
+      nameUser: formsEdit.value.nameUser,
+      password: formsEdit.value.password,
+      email: formsEdit.value.email,
+      noHp: formsEdit.value.noHp,
+      bidangMataPelajaran: formsEdit.value.bidangMataPelajaran,
+    };
+    // console.log(formsEdit.value.idUser, " dan ", updatedData.nameUser)
 
-        const response = await axios.put(`http://localhost:3000/users/${formsEdit.value.idUser}`, updatedData)
-        if (response.status === 200) {
-            console.log("Data updated successfully:", response.data)
-            loadData()
-            dialogEdit.value = false
-            textSnackbar.value = "Data Berhasil Diperbarui";
-            snackbar.value = true;
-        } else {
-            console.error("Error update data:", response.data)
-        }
-    } catch (error) {
-        console.error("Error update data", error)
+    const response = await axios.put(
+      `http://localhost:3000/users/${formsEdit.value.idUser}`,
+      updatedData
+    );
+    if (response.status === 200) {
+      console.log("Data updated successfully:", response.data);
+      loadData();
+      dialogEdit.value = false;
+      textSnackbar.value = "Data Berhasil Diperbarui";
+      snackbar.value = true;
+    } else {
+      console.error("Error update data:", response.data);
     }
-}
+  } catch (error) {
+    console.error("Error update data", error);
+  }
+};
 
 // mengambil data id untuk dihapus
 const deleteItem = (id) => {
-    deleteId.value = id;
-    // console.log(deleteId.value)
-    dialogDelete.value = true;
-}
+  deleteId.value = id;
+  // console.log(deleteId.value)
+  dialogDelete.value = true;
+};
 
 // confirm delete data
 const deleteItemConfirm = async () => {
-    try {
-        const response = await axios.delete(`http://localhost:3000/users/${deleteId.value}`)
-        if (response.status === 200) {
-            console.log("Data deleted successfully:", response.data);
-            loadData(); // Reload data after deletion
-            dialogDelete.value = false;
-            textSnackbar.value = "Data Berhasil Dihapus";
-            snackbar.value = true;
-        } else {
-            console.error("Error deleting data:", response.data);
-        }
-    } catch (error) {
-        console.log("Error deleting data:", error);
+  try {
+    const response = await axios.delete(
+      `http://localhost:3000/users/${deleteId.value}`
+    );
+    if (response.status === 200) {
+      console.log("Data deleted successfully:", response.data);
+      loadData(); // Reload data after deletion
+      dialogDelete.value = false;
+      textSnackbar.value = "Data Berhasil Dihapus";
+      snackbar.value = true;
+    } else {
+      console.error("Error deleting data:", response.data);
     }
-}
-
+  } catch (error) {
+    console.log("Error deleting data:", error);
+  }
+};
 </script>
