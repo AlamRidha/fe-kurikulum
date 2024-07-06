@@ -21,3 +21,8 @@ export const formattedDate = (data) => {
   // Menggabungkan bagian-bagian tanggal dan waktu
   return `${day} ${month} ${year}, ${formattedHours}:${formattedMinutes}`;
 };
+
+// text rules
+export const textRules = (fieldName) => {
+  return [(v) => !!v || `${fieldName} Harus Diisi`];
+};
