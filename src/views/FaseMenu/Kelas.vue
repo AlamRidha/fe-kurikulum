@@ -33,10 +33,7 @@
             "
           >
             <v-card-item>
-              <v-img
-                height="180px"
-                src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
-              ></v-img>
+              <v-img height="180px" :src="imageSrc"></v-img>
               <v-card-actions class="justify-end">
                 <v-btn
                   class="bg-success rounded-xl"
@@ -57,6 +54,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import MenuTitle from "../../components/MenuTitle.vue";
 import { useRoute } from "vue-router";
+import imageSrc from "@/assets/img/gambar3.png";
 
 const kelas = ref([]);
 // ambil parameter id
