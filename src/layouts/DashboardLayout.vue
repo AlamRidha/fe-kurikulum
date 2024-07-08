@@ -21,7 +21,7 @@
       </v-list-item>
       <v-list-item to="/administrasiguru" title="Buku Guru" class="my-8">
         <template v-slot:prepend>
-          <v-icon icon="mdi mdi-book" />
+          <v-icon icon="mdi mdi-book-open-variant" />
         </template>
       </v-list-item>
       <v-list-item to="/datalistguru" title="Daftar Guru" class="my-8">

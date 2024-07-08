@@ -27,10 +27,7 @@
               >Tahun ajaran
               {{ formatTahunAjaran(i.tahunAjaran) }}</v-card-subtitle
             >
-            <v-img
-              height="130px"
-              src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
-            ></v-img>
+            <v-img height="130px" :src="imageSrc"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 size="small"
@@ -55,6 +52,8 @@ import axios from "axios";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
 import MenuTitle from "../../components/MenuTitle.vue";
+import imageSrc from "@/assets/img/gambar5.jpg";
+
 // ambil parameter id
 const route = useRoute();
 const idSemester = route.params.idSemester;

@@ -28,10 +28,7 @@
         >
           <v-card-item>
             <v-card-title>Capaian Pembelajaran</v-card-title>
-            <v-img
-              height="150px"
-              src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
-            ></v-img>
+            <v-img height="150px" :src="imageSrc"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -52,10 +49,7 @@
         >
           <v-card-item>
             <v-card-title>Tujuan Pembelajaran</v-card-title>
-            <v-img
-              height="150px"
-              src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
-            ></v-img>
+            <v-img height="150px" :src="imageSrc"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -76,10 +70,7 @@
         >
           <v-card-item>
             <v-card-title>Alur Tujuan Pembelajaran</v-card-title>
-            <v-img
-              height="150px"
-              src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
-            ></v-img>
+            <v-img height="150px" :src="imageSrc"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -99,11 +90,8 @@
           elevation="8"
         >
           <v-card-item>
-            <v-card-title>Model Pembelajaran</v-card-title>
-            <v-img
-              height="150px"
-              src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
-            ></v-img>
+            <v-card-title>Modul Pembelajaran</v-card-title>
+            <v-img height="150px" :src="imageSrc"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -124,10 +112,7 @@
         >
           <v-card-item>
             <v-card-title>Asesmen</v-card-title>
-            <v-img
-              height="150px"
-              src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
-            ></v-img>
+            <v-img height="150px" :src="imageSrc"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -146,6 +131,7 @@
 import MenuTitle from "../../components/MenuTitle.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
+import imageSrc from "@/assets/img/gambar5.jpg";
 
 const route = useRoute();
 const idFase = route.params.idFase;

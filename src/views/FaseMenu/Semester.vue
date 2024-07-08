@@ -21,7 +21,7 @@
             class="mx-auto rounded-xl"
             max-width="500"
             width="300"
-            height="300"
+            height="320"
             elevation="8"
             prepend-icon="mdi-account"
             :title="i.namaSemester"
@@ -38,12 +38,15 @@
           >
             <v-card-item>
               <v-img
+                class="mt-2"
                 height="180px"
-                src="https://i.pinimg.com/236x/0d/2d/f3/0d2df34a24e60fb459b4e055da86969e.jpg"
+                :src="imageSrc"
+                aspect-ratio="1/1"
+                cover
               ></v-img>
               <v-card-actions class="justify-end">
                 <v-btn
-                  class="bg-success rounded-xl"
+                  class="bg-success rounded-xl mt-3"
                   :to="`/fase/${$route.params.idFase}/kelas/${$route.params.idKelas}/semester/${i.idSemester}/mata-pelajaran`"
                   >Pilih</v-btn
                 >
@@ -61,6 +64,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import MenuTitle from "../../components/MenuTitle.vue";
 import { useRoute } from "vue-router";
+import imageSrc from "@/assets/img/gambar4.png";
 
 const semester = ref([]);
 
