@@ -49,7 +49,7 @@
         >
           <v-card-item>
             <v-card-title>Tujuan Pembelajaran</v-card-title>
-            <v-img height="150px" :src="imageSrc"></v-img>
+            <v-img height="150px" :src="imageSrc2"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -70,7 +70,7 @@
         >
           <v-card-item>
             <v-card-title>Alur Tujuan Pembelajaran</v-card-title>
-            <v-img height="150px" :src="imageSrc"></v-img>
+            <v-img height="150px" :src="imageSrc3"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -91,7 +91,7 @@
         >
           <v-card-item>
             <v-card-title>Modul Pembelajaran</v-card-title>
-            <v-img height="150px" :src="imageSrc"></v-img>
+            <v-img height="150px" :src="imageSrc4"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -112,7 +112,7 @@
         >
           <v-card-item>
             <v-card-title>Asesmen</v-card-title>
-            <v-img height="150px" :src="imageSrc"></v-img>
+            <v-img height="150px" :src="imageSrc5"></v-img>
             <v-card-actions class="justify-end">
               <v-btn
                 class="bg-success rounded-xl"
@@ -131,7 +131,11 @@
 import MenuTitle from "../../components/MenuTitle.vue";
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import imageSrc from "@/assets/img/gambar5.jpg";
+import imageSrc from "@/assets/img/gambar6.png";
+import imageSrc2 from "@/assets/img/gambar7.png";
+import imageSrc3 from "@/assets/img/gambar8.png";
+import imageSrc4 from "@/assets/img/gambar9.png";
+import imageSrc5 from "@/assets/img/gambar10.png";
 
 const route = useRoute();
 const idFase = route.params.idFase;
