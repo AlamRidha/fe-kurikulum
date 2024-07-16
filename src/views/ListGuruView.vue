@@ -233,7 +233,7 @@
     <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
-      color="blue-grey"
+      :color="colorSnackbar"
       rounded="pill"
       width="200"
     >
@@ -277,6 +277,8 @@ const dataUser = ref([]);
 const snackbar = ref(false);
 const textSnackbar = ref("");
 const timeout = ref(2000);
+
+colorSnackbar.value = "green-lighten-1";
 
 // rules
 const isFormValid = ref(false);
@@ -421,6 +423,7 @@ const save = async () => {
         loadData();
         textSnackbar.value = "Data Berhasil Disimpan";
         snackbar.value = true;
+        colorSnackbar.value = "green-lighten-1";
       } else {
         console.error("Error save data", response.data);
       }
@@ -429,6 +432,9 @@ const save = async () => {
     }
   } else {
     console.log("Form tidak valid");
+    textSnackbar.value = "Data Kosong";
+    colorSnackbar.value = "red";
+    snackbar.value = true;
   }
 };
 
@@ -476,6 +482,7 @@ const updateData = async () => {
       dialogEdit.value = false;
       textSnackbar.value = "Data Berhasil Diperbarui";
       snackbar.value = true;
+      colorSnackbar.value = "green-lighten-1";
     } else {
       console.error("Error update data:", response.data);
     }
@@ -503,6 +510,7 @@ const deleteItemConfirm = async () => {
       dialogDelete.value = false;
       textSnackbar.value = "Data Berhasil Dihapus";
       snackbar.value = true;
+      colorSnackbar.value = "green-lighten-1";
     } else {
       console.error("Error deleting data:", response.data);
     }

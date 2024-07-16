@@ -276,7 +276,7 @@
     <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
-      color="blue-grey"
+      :color="colorSnackbar"
       rounded="pill"
       width="200"
     >
@@ -304,6 +304,7 @@ const isFormValid = ref(false);
 
 const snackbar = ref(false);
 const textSnackbar = ref("");
+const colorSnackbar = ref("green-lighten-1");
 const timeout = ref(2000);
 
 const forms = ref({
@@ -393,7 +394,7 @@ const loadData = async () => {
 // simpan data
 const save = async () => {
   if (isFormValid.value) {
-    console.log(" diekskusi");
+    // console.log(" diekskusi");
     try {
       const newData = {
         elemen: forms.value.elemen,
@@ -419,7 +420,10 @@ const save = async () => {
       console.error("Error save data", error);
     }
   } else {
-    console.log("tdk diekskusi");
+    // console.log("tdk diekskusi");
+    textSnackbar.value = "Data Kosong";
+    colorSnackbar.value = "red";
+    snackbar.value = true;
   }
 };
 

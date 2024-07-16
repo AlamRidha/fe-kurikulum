@@ -478,7 +478,7 @@
     <v-snackbar
       v-model="snackbar"
       :timeout="timeout"
-      color="blue-grey"
+      :color="colorSnackbar"
       rounded="pill"
       width="200"
     >
@@ -508,6 +508,7 @@ const namaDimensi = ref([]);
 const snackbar = ref(false);
 const textSnackbar = ref("");
 const timeout = ref(2000);
+const colorSnackbar = ref("green-lighten-1");
 
 const forms = ref({
   tahun_penyusunan: "",
