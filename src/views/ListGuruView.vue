@@ -278,7 +278,7 @@ const snackbar = ref(false);
 const textSnackbar = ref("");
 const timeout = ref(2000);
 
-colorSnackbar.value = "green-lighten-1";
+const colorSnackbar = ref("green-lighten-1");
 
 // rules
 const isFormValid = ref(false);

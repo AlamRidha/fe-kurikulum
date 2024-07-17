@@ -40,26 +40,31 @@
 
               <v-card-text>
                 <v-container class="py-4">
-                  <v-form ref="form">
+                  <v-form ref="form" v-model="isFormValid">
                     <v-text-field
                       v-model="forms.tahun_penyusunan"
                       label="Tahun Penyusunan"
+                      :rules="textRules('Tahun Penyusunan')"
                     ></v-text-field>
                     <v-text-field
                       v-model="forms.bab"
                       label="Bab"
+                      :rules="textRules('Bab')"
                     ></v-text-field>
                     <v-text-field
                       v-model="forms.tema"
                       label="Tema"
+                      :rules="textRules('Tema')"
                     ></v-text-field>
                     <v-text-field
                       v-model="forms.alokasi_waktu"
                       label="Alokasi Waktu"
+                      :rules="textRules('Alokasi Waktu')"
                     ></v-text-field>
                     <v-text-field
                       v-model="forms.kompetensi_awal"
                       label="Kompetensi Awal"
+                      :rules="textRules('Kompetensi Awal')"
                     ></v-text-field>
                     <v-combobox
                       v-model="forms.profil_pancasila"
@@ -73,35 +78,37 @@
                     <v-text-field
                       v-model="forms.sarana_prasarana"
                       label="Sarana dan Prasarana"
+                      :rules="textRules('Sarana dan Prasarana')"
                     ></v-text-field>
                     <v-text-field
                       v-model="forms.model_pembelajaran"
                       label="Model Pembelajaran"
+                      :rules="textRules('Model Pembelajaran')"
                     ></v-text-field>
                     <v-text-field
                       v-model="forms.tujuan_bab"
                       label="Tujuan Bab"
+                      :rules="textRules('Tujuan Bab')"
                     ></v-text-field>
                     <!-- <v-select v-model="forms.deskripsi_cp" :items="deskripsiCapaian"
                                             label="Deskripsi Capaian Pembelajaran"></v-select> -->
                     <v-text-field
                       v-model="forms.deskripsi_cp"
                       label="Deskripsi Capaian Pembelajaran"
+                      :rules="textRules('Deskripsi Capaian Pembelajaran')"
                     ></v-text-field>
                     <v-text-field
                       v-model="forms.pemahaman"
                       label="Pemahaman"
+                      :rules="textRules('Pemahaman')"
                     ></v-text-field>
                     <v-textarea
                       v-model="forms.kegiatan_pembelajaran"
                       label="Kegiatan Pembelajaran"
+                      :rules="textRules('Kegiatan Pembelajaran')"
                       class="rounded-xl"
                       bg-color="grey-lighten-2"
                     ></v-textarea>
-                    <!-- <textarea v-model="forms.kegiatan_pembelajaran" cols="50" rows="10"
-                                            name="Kegiatan Pembelajaran" label="Kegiatan Pembelajaran"
-                                            placeholder="Kegiatan Pembelajaran"
-                                            class="border-sm elevation-2 pa-2"></textarea> -->
                   </v-form>
                 </v-container>
               </v-card-text>
@@ -492,9 +499,12 @@ import MenuTitle from "../../components/MenuTitle.vue";
 import { ref, onMounted } from "vue";
 import axios from "axios";
 import { formattedText } from "../../helper/index";
+import { textRules } from "../../helper/index";
 import { useRoute } from "vue-router";
 import { jsPDF } from "jspdf";
 import "jspdf-autotable";
+
+const isFormValid = ref(false);
 
 const namaMp = ref("");
 const route = useRoute();
@@ -649,51 +659,58 @@ const loadData = async () => {
 
 // simpan data modul pembelajaran
 const save = async () => {
-  try {
-    const newData = {
-      tahun_penyusunan: forms.value.tahun_penyusunan,
-      bab: forms.value.bab,
-      tema: forms.value.tema,
-      alokasi_waktu: forms.value.alokasi_waktu,
-      kompetensi_awal: forms.value.kompetensi_awal,
-      profil_pancasila: forms.value.profil_pancasila.join(". ").toString(),
-      sarana_prasarana: forms.value.sarana_prasarana,
-      model_pembelajaran: forms.value.model_pembelajaran,
-      tujuan_bab: forms.value.tujuan_bab,
-      deskripsi_cp: forms.value.deskripsi_cp,
-      pemahaman: forms.value.pemahaman,
-      kegiatan_pembelajaran: forms.value.kegiatan_pembelajaran,
-    };
-    // console.log("Data baru", newData)
+  if (isFormValid.value) {
+    try {
+      const newData = {
+        tahun_penyusunan: forms.value.tahun_penyusunan,
+        bab: forms.value.bab,
+        tema: forms.value.tema,
+        alokasi_waktu: forms.value.alokasi_waktu,
+        kompetensi_awal: forms.value.kompetensi_awal,
+        profil_pancasila: forms.value.profil_pancasila.join(". ").toString(),
+        sarana_prasarana: forms.value.sarana_prasarana,
+        model_pembelajaran: forms.value.model_pembelajaran,
+        tujuan_bab: forms.value.tujuan_bab,
+        deskripsi_cp: forms.value.deskripsi_cp,
+        pemahaman: forms.value.pemahaman,
+        kegiatan_pembelajaran: forms.value.kegiatan_pembelajaran,
+      };
+      // console.log("Data baru", newData)
 
-    const response = await axios.post(
-      `http://localhost:3000/kurikulum/${idMp}/modul_pembelajaran`,
-      newData
-    );
-    if (response.status === 201) {
-      // kosongkan form jika success
-      forms.value.tahun_penyusunan = "";
-      forms.value.bab = "";
-      forms.value.tema = "";
-      forms.value.alokasi_waktu = "";
-      forms.value.kompetensi_awal = "";
-      forms.value.profil_pancasila = "";
-      forms.value.sarana_prasarana = "";
-      forms.value.model_pembelajaran = "";
-      forms.value.tujuan_bab = "";
-      forms.value.deskripsi_cp = "";
-      forms.value.pemahaman = "";
-      forms.value.kegiatan_pembelajaran = "";
+      const response = await axios.post(
+        `http://localhost:3000/kurikulum/${idMp}/modul_pembelajaran`,
+        newData
+      );
+      if (response.status === 201) {
+        // kosongkan form jika success
+        forms.value.tahun_penyusunan = "";
+        forms.value.bab = "";
+        forms.value.tema = "";
+        forms.value.alokasi_waktu = "";
+        forms.value.kompetensi_awal = "";
+        forms.value.profil_pancasila = "";
+        forms.value.sarana_prasarana = "";
+        forms.value.model_pembelajaran = "";
+        forms.value.tujuan_bab = "";
+        forms.value.deskripsi_cp = "";
+        forms.value.pemahaman = "";
+        forms.value.kegiatan_pembelajaran = "";
 
-      dialog.value = false;
-      loadData();
-      textSnackbar.value = "Data Berhasil Disimpan";
-      snackbar.value = true;
-    } else {
-      console.log("Error response save data model pembelajaran");
+        dialog.value = false;
+        loadData();
+        textSnackbar.value = "Data Berhasil Disimpan";
+        snackbar.value = true;
+      } else {
+        console.log("Error response save data model pembelajaran");
+      }
+    } catch (error) {
+      console.error("Error save data model pembelajaran", error);
     }
-  } catch (error) {
-    console.error("Error save data model pembelajaran", error);
+  } else {
+    // console.log("tdk diekskusi");
+    textSnackbar.value = "Data Kosong";
+    colorSnackbar.value = "red";
+    snackbar.value = true;
   }
 };
 

@@ -413,6 +413,7 @@ const save = async () => {
         loadData();
         textSnackbar.value = "Data Berhasil Disimpan";
         snackbar.value = true;
+        colorSnackbar.value = "green-lighten-1";
       } else {
         console.error("Error respone data ", response.data);
       }
@@ -446,6 +447,7 @@ const deleteItemConfirm = async () => {
       dialogDelete.value = false;
       textSnackbar.value = "Data Berhasil Dihapus";
       snackbar.value = true;
+      colorSnackbar.value = "green-lighten-1";
     } else {
       console.error("Error response data:", response.data);
     }
@@ -491,6 +493,7 @@ const updateData = async () => {
       dialogEdit.value = false;
       textSnackbar.value = "Data Berhasil Diperbarui";
       snackbar.value = true;
+      colorSnackbar.value = "green-lighten-1";
     } else {
       console.error("Error response data:", response.data);
     }

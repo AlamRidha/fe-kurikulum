@@ -72,7 +72,6 @@
                       label="Alur Tujuan Pembelajaran"
                       multiple
                       chips
-                      class="pe-4"
                     ></v-combobox>
                   </v-form>
                 </v-container>
@@ -479,7 +478,7 @@ const updateData = async () => {
     const updateData = {
       tahap: formsEdit.value.tahap,
       alur_tujuan_pembelajaran: formsEdit.value.alur_tujuan_pembelajaran
-        .join(". ")
+        .join("\n")
         .toString(),
     };
 
