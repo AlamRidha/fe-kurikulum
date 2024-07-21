@@ -12,6 +12,8 @@
           single-line
           placeholder="Cari Nama Guru..."
           hide-details
+          density="compact"
+          class="mb-4 rounded-xl"
         ></v-text-field>
       </v-col>
     </v-row>
