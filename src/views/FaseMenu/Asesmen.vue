@@ -40,7 +40,7 @@
 
               <v-card-text>
                 <v-container class="py-4">
-                  <v-form ref="form">
+                  <v-form ref="form" v-model="isFormValid">
                     <v-select
                       v-model="forms.namaBab"
                       :items="bab_modul"
@@ -65,7 +65,6 @@
                       label="Keterangan"
                       bg-color="grey-lighten-2"
                       colorSnackbar.value="green-lighten-1"
-                      ;
                       :rules="textRules('Keterangan')"
                     ></v-textarea>
                   </v-form>
