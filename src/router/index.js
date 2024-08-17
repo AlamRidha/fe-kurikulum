@@ -14,6 +14,7 @@ import AlurTujuanPembelajaranView from "../views/FaseMenu/AlurTujuanPembelajaran
 import ModelPembelajaranView from "../views/FaseMenu/ModelPembelajaran.vue";
 import AsesmenView from "../views/FaseMenu/Asesmen.vue";
 import RppMpView from "../views/FaseMenu/RppMp.vue";
+import KurikulumView from "../views/KurikulumView.vue";
 import Layout from "../layouts/DashboardLayout.vue";
 import { useAuthStore } from "../stores/useAuthStore";
 
@@ -78,6 +79,11 @@ const router = createRouter({
           path: "fase/:idFase/kelas/:idKelas/semester/:idSemester/mata-pelajaran/:idMp/rpp-mp/asesmen",
           name: "Asesmen",
           component: AsesmenView,
+        },
+        {
+          path: "/kurikulum",
+          name: "Kurikulum",
+          component: KurikulumView,
         },
         {
           path: "/datalistguru",

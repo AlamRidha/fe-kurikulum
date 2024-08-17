@@ -10,7 +10,6 @@
       :items="dataProfilPelajar"
       :items-per-page="6"
       class="elevation-5 mt-4"
-      :search="searchData"
     >
       <template v-slot:item.no="{ index }"> {{ index + 1 }} </template>
 
@@ -283,7 +282,6 @@ const detailItem = ref({
 });
 
 const deleteId = ref("");
-const searchData = ref("");
 
 // dialog
 const dialogDelete = ref(false);

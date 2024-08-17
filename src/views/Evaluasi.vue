@@ -16,7 +16,7 @@
         <span
           variant="flat"
           :class="
-            item.status_evaluasi === 'Terlaksana'
+            item.status_evaluasi === 'Tercapai'
               ? 'text-caption flat text-green-lighten-5 bg-green pa-2 rounded-pill'
               : 'text-caption flat text-red-lighten-5 bg-red pa-2 rounded-pill'
           "
@@ -388,7 +388,7 @@ const itemKelas = ref([
   "Kelas 6",
 ]);
 const itemSemester = ref(["Semester 1", "Semester 2"]);
-const itemStatus = ref(["Belum Terlaksana", "Terlaksana"]);
+const itemStatus = ref(["Belum Tercapai", "Tercapai"]);
 const itemMataPelajaran = ref([]);
 
 const forms = ref({

@@ -203,7 +203,7 @@
 
                     <!-- JenisAsesmen -->
                     <v-col cols="3">
-                      <v-sheet> JenisAsesmen </v-sheet>
+                      <v-sheet> Jenis Asesmen </v-sheet>
                     </v-col>
                     <v-col cols="1">
                       <v-sheet class="pa-1"> : </v-sheet>

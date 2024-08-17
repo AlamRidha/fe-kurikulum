@@ -88,7 +88,7 @@
                 size="small"
                 class="bg-success rounded-xl"
                 :to="`/fase/${$route.params.idFase}/kelas/${$route.params.idKelas}/semester/${$route.params.idSemester}/mata-pelajaran/${i.idMp}/rpp-mp`"
-                >RPP & Kurikulum</v-btn
+                >Pilih</v-btn
               >
               <!-- <v-btn size="small" class="bg-success"
                                 @click="console.log('idFase', $route.params.idFase, ' idSemester ', $route.params.idSemester, ' idMataPelajarn ', i.idMp)">RPP
