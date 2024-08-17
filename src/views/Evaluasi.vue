@@ -12,6 +12,19 @@
     >
       <template v-slot:item.no="{ index }"> {{ index + 1 }} </template>
 
+      <template v-slot:item.linkEvaluasi="{ item }">
+        <v-btn
+          :href="item.linkEvaluasi"
+          text
+          color="primary"
+          target="_blank"
+          class="rounded-xl"
+          size="small"
+        >
+          <img :src="linkSvg" width="17px" class="me-2" />
+          Buka
+        </v-btn>
+      </template>
       <template v-slot:item.status_evaluasi="{ item }">
         <span
           variant="flat"
@@ -70,17 +83,15 @@
                       :items="itemSemester"
                       label="Semester"
                     ></v-select>
-                    <v-select
-                      v-model="forms.mata_pelajaran"
-                      :items="itemMataPelajaran"
-                      label="Nama Mata Pelajaran"
-                    ></v-select>
-
-                    <!-- <v-text-field v-model="forms.mata_pelajaran"
+                    <v-text-field
+                      v-model="forms.tahunPelajaran"
+                      label="Tahun Pelajaran"
+                    ></v-text-field>
+                    <!-- <v-text-field v-model="forms.tahunPelajaran"
                                             label="Nama Mata Pelajaran"></v-text-field> -->
                     <v-text-field
-                      v-model="forms.jenis_evaluasi"
-                      label="Jenis Evaluasi"
+                      v-model="forms.linkEvaluasi"
+                      label="Link Evaluasi"
                     ></v-text-field>
                     <!-- <v-text-field v-model="forms.status_evaluasi"
                                             label="Status Evaluasi"></v-text-field> -->
@@ -143,16 +154,16 @@
                       :items="itemSemester"
                       label="Semester"
                     ></v-select>
-                    <!-- <v-text-field v-model="formsEdit.mata_pelajaran"
+                    <!-- <v-text-field v-model="formsEdit.tahunPelajaran"
                                             label="Nama Mata Pelajaran"></v-text-field> -->
                     <v-select
-                      v-model="formsEdit.mata_pelajaran"
+                      v-model="formsEdit.tahunPelajaran"
                       :items="itemMataPelajaran"
-                      label="Nama Mata Pelajaran"
+                      label="Tahun Pelajaran"
                     ></v-select>
                     <v-text-field
-                      v-model="formsEdit.jenis_evaluasi"
-                      label="Jenis Evaluasi"
+                      v-model="formsEdit.linkEvaluasi"
+                      label="Link Evaluasi"
                     ></v-text-field>
                     <!-- <v-text-field v-model="formsEdit.status_evaluasi"
                                             label="Status Evaluasi"></v-text-field> -->
@@ -256,21 +267,21 @@
                       </v-sheet>
                     </v-col>
 
-                    <!-- Mata Pelajaran -->
+                    <!-- Tahun Pelajaran -->
                     <v-col cols="3">
-                      <v-sheet> Mata Pelajaran </v-sheet>
+                      <v-sheet> Tahun Pelajaran </v-sheet>
                     </v-col>
                     <v-col cols="1">
                       <v-sheet class="pa-1"> : </v-sheet>
                     </v-col>
                     <v-col cols="8">
                       <v-sheet class="pa-1 text-justify">
-                        {{ dataShow.mata_pelajaran }}
+                        {{ dataShow.tahunPelajaran }}
                       </v-sheet>
                     </v-col>
 
                     <!-- Jenis Evaluasi -->
-                    <v-col cols="3">
+                    <!-- <v-col cols="3">
                       <v-sheet> Jenis Evaluasi </v-sheet>
                     </v-col>
                     <v-col cols="1">
@@ -278,9 +289,9 @@
                     </v-col>
                     <v-col cols="8">
                       <v-sheet class="pa-1 text-justify">
-                        {{ dataShow.jenis_evaluasi }}
+                        {{ dataShow.linkEvaluasi }}
                       </v-sheet>
-                    </v-col>
+                    </v-col> -->
 
                     <!-- Masalah Evaluasi -->
                     <v-col cols="3">
@@ -362,6 +373,7 @@ import { ref, onMounted } from "vue";
 import axios from "axios";
 import { formattedDate, formattedText } from "../helper/index";
 import { useAuthStore } from "../stores/useAuthStore";
+import linkSvg from "../assets/linksvg.svg";
 
 const userStore = useAuthStore();
 const roleUser = userStore.user.bidangMataPelajaran.toLowerCase();
@@ -394,8 +406,8 @@ const itemMataPelajaran = ref([]);
 const forms = ref({
   namaKelas: "",
   semester: "",
-  mata_pelajaran: "",
-  jenis_evaluasi: "",
+  tahunPelajaran: "",
+  linkEvaluasi: "",
   masalah_evaluasi: "",
   status_evaluasi: "",
 });
@@ -404,8 +416,8 @@ const formsEdit = ref({
   idEval: "",
   namaKelas: "",
   semester: "",
-  mata_pelajaran: "",
-  jenis_evaluasi: "",
+  tahunPelajaran: "",
+  linkEvaluasi: "",
   masalah_evaluasi: "",
   status_evaluasi: "",
 });
@@ -414,8 +426,8 @@ const dataShow = ref({
   idEval: "",
   namaKelas: "",
   semester: "",
-  mata_pelajaran: "",
-  jenis_evaluasi: "",
+  tahunPelajaran: "",
+  linkEvaluasi: "",
   masalah_evaluasi: "",
   status_evaluasi: "",
 });
@@ -441,17 +453,17 @@ const headers = ref([
     sortable: false,
     key: "semester",
   },
+  // {
+  //   title: "Tahun Pelajaran",
+  //   align: "center",
+  //   sortable: false,
+  //   key: "tahunPelajaran",
+  // },
   {
-    title: "Mata Pelajaran",
+    title: "Dokumen Evaluasi",
     align: "center",
     sortable: false,
-    key: "mata_pelajaran",
-  },
-  {
-    title: "Jenis Evaluasi",
-    align: "center",
-    sortable: false,
-    key: "jenis_evaluasi",
+    key: "linkEvaluasi",
   },
   {
     title: "Status",
@@ -505,8 +517,8 @@ const save = async () => {
     const newData = {
       namaKelas: forms.value.namaKelas,
       semester: forms.value.semester,
-      mata_pelajaran: forms.value.mata_pelajaran,
-      jenis_evaluasi: forms.value.jenis_evaluasi,
+      tahunPelajaran: forms.value.tahunPelajaran,
+      linkEvaluasi: forms.value.linkEvaluasi,
       masalah_evaluasi: forms.value.masalah_evaluasi,
       status_evaluasi: forms.value.status_evaluasi,
     };
@@ -518,8 +530,8 @@ const save = async () => {
     if (response.status === 201) {
       forms.value.namaKelas = "";
       forms.value.semester = "";
-      forms.value.mata_pelajaran = "";
-      forms.value.jenis_evaluasi = "";
+      forms.value.tahunPelajaran = "";
+      forms.value.linkEvaluasi = "";
       forms.value.masalah_evaluasi = "";
       forms.value.status_evaluasi = "";
 
@@ -571,8 +583,8 @@ const editItem = async (id) => {
       idEval: data.idEval,
       namaKelas: data.namaKelas,
       semester: data.semester,
-      mata_pelajaran: data.mata_pelajaran,
-      jenis_evaluasi: data.jenis_evaluasi,
+      tahunPelajaran: data.tahunPelajaran,
+      linkEvaluasi: data.linkEvaluasi,
       masalah_evaluasi: data.masalah_evaluasi,
       status_evaluasi: data.status_evaluasi,
     };
@@ -586,8 +598,8 @@ const updateData = async () => {
     const updateData = {
       namaKelas: formsEdit.value.namaKelas,
       semester: formsEdit.value.semester,
-      mata_pelajaran: formsEdit.value.mata_pelajaran,
-      jenis_evaluasi: formsEdit.value.jenis_evaluasi,
+      tahunPelajaran: formsEdit.value.tahunPelajaran,
+      linkEvaluasi: formsEdit.value.linkEvaluasi,
       masalah_evaluasi: formsEdit.value.masalah_evaluasi,
       status_evaluasi: formsEdit.value.status_evaluasi,
     };
@@ -619,8 +631,8 @@ const showItem = async (id) => {
       idEval: data.idEval,
       namaKelas: data.namaKelas,
       semester: data.semester,
-      mata_pelajaran: data.mata_pelajaran,
-      jenis_evaluasi: data.jenis_evaluasi,
+      tahunPelajaran: data.tahunPelajaran,
+      linkEvaluasi: data.linkEvaluasi,
       masalah_evaluasi: data.masalah_evaluasi,
       status_evaluasi: data.status_evaluasi,
     };
