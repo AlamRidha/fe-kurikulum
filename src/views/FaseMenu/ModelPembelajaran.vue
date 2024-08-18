@@ -19,6 +19,17 @@
           <v-divider class="mx-4" inset vertical></v-divider>
           <v-spacer></v-spacer>
 
+          <!-- Tombol Download PDF -->
+          <v-btn
+            class="mb-2 bg-green me-2"
+            color="white"
+            dark
+            @click="downloadPDF"
+            prepend-icon="mdi mdi-file"
+          >
+            Download PDF
+          </v-btn>
+
           <!-- modal tambah -->
           <v-dialog v-model="dialog" max-width="550px">
             <template v-slot:activator="{ props }">
@@ -847,7 +858,7 @@ const getMatapelajaran = async () => {
     const response = await axios.get(`http://localhost:3000/fase/mp/${idMp}`);
     const data = response.data;
     namaMp.value = data.namaMataPelajaran;
-    // console.log(namaMp.value)
+    // console.log(namaMp.value);
     return data;
   } catch (error) {
     console.error("Error get data", error);
@@ -867,6 +878,149 @@ const getProfilPelajar = async () => {
   } catch (error) {
     console.error(error);
   }
+};
+
+const downloadPDF = () => {
+  const doc = new jsPDF();
+
+  let x = 0;
+  let textWidth = 0;
+
+  // menghitung lebar halaman dan lebar teks
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  // console.log(pageWidth);
+
+  // menggambar garis
+  const drawFooterLine = () => {
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(1);
+    doc.line(10, pageHeight - 12, pageWidth - 10, pageHeight - 12);
+  };
+
+  // memberikan footer
+  const addFooter = () => {
+    const footerText = "SDN 138 Kota Pekanbaru";
+    drawFooterLine();
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bolditalic");
+    doc.text(footerText, 10, pageHeight - 5);
+  };
+
+  // Menambahkan judul besar
+  const title = "Modul Pembelajaran";
+  doc.setFontSize(23);
+  textWidth = doc.getTextWidth(title);
+  x = (pageWidth - textWidth) / 2;
+  doc.text(title, x, 15);
+
+  // Menambahkan judul kecil
+  const namaMapel = namaMp.value;
+  doc.setFontSize(18);
+  textWidth = doc.getTextWidth(namaMapel);
+  x = (pageWidth - textWidth) / 2;
+  doc.text(namaMapel, x, 25);
+
+  const sekolah = "Sekolah Dasar Negeri 138 Pekanbaru";
+  textWidth = doc.getTextWidth(sekolah);
+  x = (pageWidth - textWidth) / 2;
+  doc.setFontSize(18);
+  doc.text(sekolah, x, 35);
+
+  const subTitle1 = "Informasi Umum";
+  textWidth = doc.getTextWidth(subTitle1);
+  x = (pageWidth - textWidth) / 2;
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text(subTitle1, 18, 50);
+
+  const subSubTitle1 = "A. Identitas Modul Pembelajaran";
+  textWidth = doc.getTextWidth(subSubTitle1);
+  x = (pageWidth - textWidth) / 2;
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  doc.text(subSubTitle1, 18, 60);
+
+  const tableRows = modul_pembelajaran.value.map((modul) => [
+    ["Instansi", "Sekolah Dasar Negeri 138 Pekanbaru"],
+    ["Tahun Penyusunan", modul.tahun_penyusunan],
+    ["Mata Pelajaran", namaMapel],
+    ["Bab", modul.bab],
+    ["Tema", modul.tema],
+    ["Alokasi Waktu", modul.alokasi_waktu],
+    ["Kompetensi Awal", modul.kompetensi_awal],
+    ["Profil Pancasila", modul.profil_pancasila],
+    ["Sarana dan Prasarana", modul.sarana_prasarana],
+    ["Model Pembelajaran", modul.model_pembelajaran],
+  ]);
+
+  // Menggunakan autoTable untuk membuat tabel tanpa header
+  tableRows.forEach((row) => {
+    doc.autoTable({
+      body: row.map(([label, value]) => [label, ` ${value}`]),
+      startY: 65,
+      columnStyles: {
+        0: { cellWidth: 60, halign: "left" }, // Lebar kolom label
+        1: { cellWidth: 130, halign: "left" }, // Lebar kolom nilai
+      },
+      theme: "plain", // Tidak ada garis di sekitar tabel, hanya garis bawah setiap sel
+      styles: { cellPadding: 5, fontSize: 12, halign: "left" }, // Pengaturan gaya sel
+      tableLineWidth: 0.1, // Garis tabel
+      margin: { top: 20 }, // Menambahkan margin atas untuk ruang
+      pageBreak: "auto", // Membiarkan autoTable memecah halaman jika perlu
+      autoSize: true, // Otomatis menyesuaikan ukuran kolom
+    });
+  });
+
+  const subTitle2 = "Komponen Inti";
+  textWidth = doc.getTextWidth(subTitle2);
+  x = (pageWidth - textWidth) / 2;
+  doc.setFontSize(14);
+  doc.setFont("helvetica", "bold");
+  doc.text(subTitle2, 18, doc.lastAutoTable.finalY + 10);
+
+  const subSubTitle2 = "B. Tujuan Kegiatan Pembelajaran";
+  textWidth = doc.getTextWidth(subSubTitle2);
+  x = (pageWidth - textWidth) / 2;
+  doc.setFontSize(12);
+  doc.setFont("helvetica", "normal");
+  doc.text(subSubTitle2, 18, doc.lastAutoTable.finalY + 20);
+
+  const tableRows2 = modul_pembelajaran.value.map((modul) => [
+    ["Tujuan Bab", modul.tujuan_bab],
+    ["Deskripsi Capaian Pembelajaran", modul.deskripsi_cp],
+    ["Pemahaman", modul.pemahaman],
+    ["Kegiatan Pembelajaran", modul.kegiatan_pembelajaran],
+  ]);
+
+  tableRows2.forEach((row) => {
+    doc.autoTable({
+      body: row.map(([label, value]) => [label, ` ${value}`]),
+      startY: doc.lastAutoTable ? doc.lastAutoTable.finalY + 25 : 80,
+      columnStyles: {
+        0: { cellWidth: 80, halign: "left" }, // Lebar kolom label
+        1: { cellWidth: 80, halign: "left" }, // Lebar kolom nilai
+      },
+      theme: "plain", // Tidak ada garis di sekitar tabel, hanya garis bawah setiap sel
+      styles: { cellPadding: 5, fontSize: 12, halign: "left" }, // Pengaturan gaya sel
+      tableLineWidth: 0.1, // Garis tabel
+      margin: { top: 20 }, // Menambahkan margin atas untuk ruang
+      pageBreak: "auto", // Membiarkan autoTable memecah halaman jika perlu
+      autoSize: true, // Otomatis menyesuaikan ukuran kolom
+    });
+  });
+
+  const totalPages = doc.internal.getNumberOfPages();
+
+  // Tambahkan footer ke setiap halaman
+  for (let j = 1; j <= totalPages; j++) {
+    doc.setPage(j);
+    addFooter();
+  }
+
+  // Menyimpan dokumen PDF
+  doc.save("Modul Pembelajaran.pdf");
 };
 
 onMounted(() => {
