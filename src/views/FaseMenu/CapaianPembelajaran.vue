@@ -505,25 +505,37 @@ const updateData = async () => {
 const downloadPDF = () => {
   const doc = new jsPDF();
 
+  let x = 0;
+  let textWidth = 0;
+
+  // menghitung lebar halaman dan lebar teks
+  const pageWidth = doc.internal.pageSize.getWidth();
+
   // header table
   const headers = [["No", "Elemen", "Capaian Pembelajaran"]];
 
   // Menambahkan judul besar
   const title = "Capaian Pembelajaran";
-  doc.setFontSize(18);
-  doc.text(title, 78, 15);
+  doc.setFontSize(24);
+  textWidth = doc.getTextWidth(title);
+  x = (pageWidth - textWidth) / 2;
+  doc.text(title, x, 15);
 
   const mapel = namaMp.value;
   doc.setFontSize(18);
-  doc.text(mapel, 83, 25);
+  textWidth = doc.getTextWidth(mapel);
+  x = (pageWidth - textWidth) / 2;
+  doc.text(mapel, x, 25);
 
   const sekolah = "Sekolah Dasar Negeri 138 Pekanbaru";
+  textWidth = doc.getTextWidth(sekolah);
+  x = (pageWidth - textWidth) / 2;
   doc.setFontSize(18);
-  doc.text(sekolah, 60, 35);
+  doc.text(sekolah, x, 35);
 
   // data tabel
   const data = capaian_pembelajaran.value.map((item, index) => [
-    index + 1,
+    index + 1 + ".",
     item.elemen,
     item.capaian_pembelajaran,
   ]);
@@ -533,8 +545,12 @@ const downloadPDF = () => {
     head: headers,
     body: data,
     startY: 45,
-    styles: { fontSize: 8 },
-    headStyles: { fillColor: [22, 160, 133], halign: "center" },
+    styles: { fontSize: 14, cellPadding: 2 },
+    headStyles: {
+      fillColor: [22, 160, 133],
+      halign: "center",
+      valign: "middle",
+    },
   });
 
   // Menyimpan dokumen PDF
