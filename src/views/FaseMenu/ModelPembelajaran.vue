@@ -882,6 +882,7 @@ const getProfilPelajar = async () => {
 
 const downloadPDF = () => {
   const doc = new jsPDF();
+  const tahun = new Date().getFullYear();
 
   let x = 0;
   let textWidth = 0;
@@ -900,7 +901,7 @@ const downloadPDF = () => {
 
   // memberikan footer
   const addFooter = () => {
-    const footerText = "SDN 138 Kota Pekanbaru";
+    const footerText = `SDN 138 Kota Pekanbaru ${tahun}`;
     drawFooterLine();
 
     doc.setFontSize(10);

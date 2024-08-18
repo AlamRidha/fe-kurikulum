@@ -504,12 +504,31 @@ const updateData = async () => {
 
 const downloadPDF = () => {
   const doc = new jsPDF();
+  const tahun = new Date().getFullYear();
 
   let x = 0;
   let textWidth = 0;
 
   // menghitung lebar halaman dan lebar teks
   const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // menggambar garis
+  const drawFooterLine = () => {
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(1);
+    doc.line(10, pageHeight - 12, pageWidth - 10, pageHeight - 12);
+  };
+
+  // memberikan footer
+  const addFooter = () => {
+    const footerText = `SDN 138 Kota Pekanbaru ${tahun}`;
+    drawFooterLine();
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bolditalic");
+    doc.text(footerText, 10, pageHeight - 5);
+  };
 
   // header table
   const headers = [["No", "Elemen", "Capaian Pembelajaran"]];
@@ -553,8 +572,16 @@ const downloadPDF = () => {
     },
   });
 
+  const totalPages = doc.internal.getNumberOfPages();
+
+  // Tambahkan footer ke setiap halaman
+  for (let j = 1; j <= totalPages; j++) {
+    doc.setPage(j);
+    addFooter();
+  }
+
   // Menyimpan dokumen PDF
-  doc.save("capaian_pembelajaran.pdf");
+  doc.save("Capaian Pembelajaran.pdf");
 };
 
 const getMatapelajaran = async () => {

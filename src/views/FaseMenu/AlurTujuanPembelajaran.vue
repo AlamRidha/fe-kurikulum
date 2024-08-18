@@ -503,26 +503,57 @@ const updateData = async () => {
 
 const downloadPDF = () => {
   const doc = new jsPDF();
+  const tahun = new Date().getFullYear();
+
+  let x = 0;
+  let textWidth = 0;
+
+  // menghitung lebar halaman dan lebar teks
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+
+  // menggambar garis
+  const drawFooterLine = () => {
+    doc.setDrawColor(0, 0, 0);
+    doc.setLineWidth(1);
+    doc.line(10, pageHeight - 12, pageWidth - 10, pageHeight - 12);
+  };
+
+  // memberikan footer
+  const addFooter = () => {
+    const footerText = `SDN 138 Kota Pekanbaru ${tahun}`;
+    drawFooterLine();
+
+    doc.setFontSize(10);
+    doc.setFont("helvetica", "bolditalic");
+    doc.text(footerText, 10, pageHeight - 5);
+  };
 
   // header table
   const headers = [["No", "Tahap", "Alur Tujuan Pembelajaran"]];
 
   // Menambahkan judul besar
   const title = "Alur Tujuan Pembelajaran";
-  doc.setFontSize(18);
-  doc.text(title, 78, 15);
+  doc.setFontSize(24);
+  textWidth = doc.getTextWidth(title);
+  x = (pageWidth - textWidth) / 2;
+  doc.text(title, x, 15);
 
   const mapel = namaMp.value;
   doc.setFontSize(18);
-  doc.text(mapel, 83, 25);
+  textWidth = doc.getTextWidth(mapel);
+  x = (pageWidth - textWidth) / 2;
+  doc.text(mapel, x, 25);
 
   const sekolah = "Sekolah Dasar Negeri 138 Pekanbaru";
+  textWidth = doc.getTextWidth(sekolah);
+  x = (pageWidth - textWidth) / 2;
   doc.setFontSize(18);
-  doc.text(sekolah, 60, 35);
+  doc.text(sekolah, x, 35);
 
   // data tabel
   const data = alur_tujuan_pembelajaran.value.map((item, index) => [
-    index + 1,
+    index + 1 + ". ",
     item.tahap,
     item.alur_tujuan_pembelajaran,
   ]);
@@ -532,9 +563,20 @@ const downloadPDF = () => {
     head: headers,
     body: data,
     startY: 45,
-    styles: { fontSize: 8 },
+    styles: { fontSize: 14, cellPadding: 2 },
+    columnStyles: {
+      1: { cellPadding: [2, 15, 2, 2] },
+    },
     headStyles: { fillColor: [22, 160, 133], halign: "center" },
   });
+
+  const totalPages = doc.internal.getNumberOfPages();
+
+  // Tambahkan footer ke setiap halaman
+  for (let j = 1; j <= totalPages; j++) {
+    doc.setPage(j);
+    addFooter();
+  }
 
   // Menyimpan dokumen PDF
   doc.save("alur_tujuan_pembelajaran.pdf");
